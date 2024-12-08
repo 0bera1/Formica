@@ -6,11 +6,10 @@ import {
   Param,
   Put,
   Delete,
-  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service'; // UsersService'i import et
 import { User } from './schema/user.schema';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+// import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @Controller('users')
@@ -28,7 +27,7 @@ export class UsersController {
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get a user by ID' }) // Swagger açıklaması
   @ApiResponse({
     status: 200,
@@ -40,7 +39,7 @@ export class UsersController {
   }
 
   @Put(':id')
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Update a user by ID' }) // Swagger açıklaması
   @ApiResponse({
     status: 200,
@@ -52,7 +51,7 @@ export class UsersController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Delete a user by ID' }) // Swagger açıklaması
   @ApiResponse({ status: 200, description: 'User deleted successfully' })
   async delete(@Param('id') id: string) {
