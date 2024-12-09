@@ -5,6 +5,9 @@ import Dashboard from './pages/Dashboard';
 import TaskDetail from './pages/TaskDetail';
 import TaskCreate from './pages/TaskCreate';
 import TaskUpdate from './pages/TaskUpdate';
+import UserList from './pages/UserList';
+import UserDetail from './pages/UserDetail';
+import UserUpdate from './pages/UserUpdate';
 
 
 const App: React.FC = () => {
@@ -16,7 +19,9 @@ const App: React.FC = () => {
         <Route path="/task/:id" element={<TaskDetail />} />
         <Route path="/task/create" element={<TaskCreate />} />
         <Route path="/task/update/:id" element={<TaskUpdate />} />
-
+        <Route path="/users" element={<UserList />} />
+        <Route path="/user/:id" element={<UserDetail />} />
+        <Route path="/user/update/:id" element={<UserUpdate />} />
 
       </Routes>
     </Router>
