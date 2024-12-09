@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { Button, Input, Form, Spin } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, AppDispatch } from '../redux/store';
-import { fetchUserDetail, updateUser } from '../redux/slices/userSlice';
+import { RootState, AppDispatch } from '../../redux/store';
+import { fetchUserDetail, updateUser } from '../../redux/slices/userSlice';
 import { useParams, useNavigate } from 'react-router-dom';
 
 interface UserUpdateFormValues {

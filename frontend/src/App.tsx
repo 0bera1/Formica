@@ -1,13 +1,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from './pages/Login';
+import Login from './pages/auth/Login';
 import Dashboard from './pages/Dashboard';
-import TaskDetail from './pages/TaskDetail';
-import TaskCreate from './pages/TaskCreate';
-import TaskUpdate from './pages/TaskUpdate';
-import UserList from './pages/UserList';
-import UserDetail from './pages/UserDetail';
-import UserUpdate from './pages/UserUpdate';
+import TaskDetail from './pages/tasks/TaskDetail';
+import TaskCreate from './pages/tasks/TaskCreate';
+import TaskUpdate from './pages/tasks/TaskUpdate';
+import UserList from './pages/users/UserList';
+import UserDetail from './pages/users/UserDetail';
+import UserUpdate from './pages/users/UserUpdate';
 
 
 const App: React.FC = () => {

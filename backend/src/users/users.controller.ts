@@ -14,7 +14,7 @@ import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {} // UsersService'i inject et
+  constructor(private readonly usersService: UsersService) { } // UsersService'i inject et
 
   @Post()
   create(@Body() createUserDto: Partial<User>) {

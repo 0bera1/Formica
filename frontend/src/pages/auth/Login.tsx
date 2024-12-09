@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { AppDispatch } from '../redux/store';
+import { AppDispatch } from '../../redux/store';
 import { Button, Input, Form, message } from 'antd';
-import { login } from '../redux/slices/authSlice';
+import { login } from '../../redux/slices/authSlice';
 import { MdEmail } from 'react-icons/md';
 import { FaKey } from 'react-icons/fa';
 

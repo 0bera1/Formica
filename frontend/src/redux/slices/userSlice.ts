@@ -28,6 +28,14 @@ export const fetchUsers = createAsyncThunk("tasks/fetchUsers", async () => {
   return response.data;
 });
 
+export const createUser = createAsyncThunk(
+  "users/createUser",
+  async ({ username, email, password }: { username: string, email: string, password:string }) => {
+    const response = await axios.post("http://localhost:3000/users", { username, email, password });
+    return response.data;
+  }
+);
+
 export const deleteUser = createAsyncThunk(
   "tasks/deleteUser",
   async (id: string) => {

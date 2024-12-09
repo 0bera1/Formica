@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { Button, Input, Form, Select, Spin } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, AppDispatch } from '../redux/store';
+import { RootState, AppDispatch } from '../../redux/store';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchTaskDetail, updateTask } from '../redux/slices/taskSlice';
+import { fetchTaskDetail, updateTask } from '../../redux/slices/taskSlice';
 import dayjs from 'dayjs';
 
 interface TaskUpdateFormValues {

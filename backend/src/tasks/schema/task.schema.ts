@@ -12,14 +12,14 @@ export class Task {
   @Prop({ required: true })
   description: string;
 
-  @Prop({ default: 'Pending' }) // Pending, In Progress, Completed
-  status: string;
-
-  @Prop({ default: 'Medium' }) // Low, Medium, High
-  priority: string;
+  @Prop({ default: [] })
+  assignees: string[];
 
   @Prop({ default: Date.now })
   createdAt: Date;
+
+  @Prop({ default: Date.now })
+  updatedAt: Date;
 }
 
 export const TaskSchema = SchemaFactory.createForClass(Task);
