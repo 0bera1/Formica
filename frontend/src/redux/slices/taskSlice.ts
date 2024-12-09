@@ -1,12 +1,10 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { createTask, deleteTask, getTasks, updateTask } from "../../api/tasks";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
 
 interface Task {
   id: string;
   title: string;
   description: string;
-  createdAt: string;
-  updatedAt: string;
 }
 
 interface TaskState {
@@ -21,63 +19,71 @@ const initialState: TaskState = {
   error: null,
 };
 
-export const fetchTasks = createAsyncThunk("tasks/fetchTasks", async () => {
-  return await getTasks();
-});
+// Get Tasks
+export const getTasks = createAsyncThunk(
+  'tasks/getTasks',
+  async (token: string) => {
+    const response = await axios.get('http://localhost:3000/tasks', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  }
+);
 
+// Add Task
 export const addTask = createAsyncThunk(
-  "tasks/addTask",
-  async (task: { title: string; description: string }) => {
-    return await createTask(task);
-  }
-);
-export const editTask = createAsyncThunk(
-  "tasks/editTask",
-  async (payload: {
-    id: string;
-    task: { title: string; description: string };
-  }) => {
-    const { id, task } = payload;
-    return await updateTask(id, task);
+  'tasks/addTask',
+  async (task: { title: string; description: string }, { getState }) => {
+    interface RootState {
+      auth: {
+        token: string;
+      };
+    }
+
+    const { token } = (getState() as RootState).auth; // Get token from state
+    const response = await axios.post(
+      'http://localhost:3000/tasks',
+      task,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
   }
 );
 
-export const removeTask = createAsyncThunk(
-  "tasks/removeTask",
-  async (id: string) => {
-    return await deleteTask(id);
-  }
-);
-
+// Task Slice
 const taskSlice = createSlice({
-  name: "tasks",
+  name: 'tasks',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchTasks.pending, (state) => {
+      .addCase(getTasks.pending, (state) => {
         state.loading = true;
-        state.error = null;
       })
-      .addCase(fetchTasks.fulfilled, (state, { payload }) => {
+      .addCase(getTasks.fulfilled, (state, { payload }) => {
+        state.loading = false;
         state.tasks = payload;
-        state.loading = false;
       })
-      .addCase(fetchTasks.rejected, (state, { error }) => {
+      .addCase(getTasks.rejected, (state, { error }) => {
         state.loading = false;
-        state.error = error.message || "Failed to fetch tasks";
+        state.error = error.message || 'Failed to fetch tasks';
+      })
+      .addCase(addTask.pending, (state) => {
+        state.loading = true;
       })
       .addCase(addTask.fulfilled, (state, { payload }) => {
+        state.loading = false;
         state.tasks.push(payload);
       })
-      .addCase(editTask.fulfilled, (state, { payload }) => {
-        const index = state.tasks.findIndex((task) => task.id === payload.id);
-        if (index !== -1) {
-          state.tasks[index] = payload;
-        }
-      })
-      .addCase(removeTask.fulfilled, (state, { payload }) => {
-        state.tasks = state.tasks.filter((task) => task.id !== payload.id);
+      .addCase(addTask.rejected, (state, { error }) => {
+        state.loading = false;
+        state.error = error.message || 'Failed to add task';
       });
   },
 });
