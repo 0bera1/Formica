@@ -50,7 +50,7 @@ const Login: React.FC = () => {
                         />
                     </Form.Item>
                     <Button
-                        type="text"
+                        type="default"
                         htmlType="submit"
                         loading={loading}
                         block

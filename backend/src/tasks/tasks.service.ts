@@ -15,7 +15,7 @@ export class TasksService {
   }
 
   async findAll(): Promise<Task[]> {
-    return this.taskModel.find().exec();
+    return this.taskModel.find().sort({ createdAt: -1 }).exec(); // Tarihe göre sıralıyoruz
   }
 
   async findOne(id: string): Promise<Task> {

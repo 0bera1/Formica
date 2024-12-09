@@ -1,89 +1,168 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 
-interface Task {
-  id: string;
+// Task tiplerini tanımlayalım
+export interface Task {
+  _id: string;
   title: string;
   description: string;
+  assignees: string[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface TaskState {
   tasks: Task[];
+  task: Task | null;
   loading: boolean;
   error: string | null;
 }
 
+// Başlangıç durumu
 const initialState: TaskState = {
   tasks: [],
+  task: null,
   loading: false,
   error: null,
 };
 
-// Get Tasks
-export const getTasks = createAsyncThunk(
-  'tasks/getTasks',
-  async (token: string) => {
-    const response = await axios.get('http://localhost:3000/tasks', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+// Getirilecek tüm görevleri fetch etmek için async thunk
+export const fetchTasks = createAsyncThunk("tasks/fetchTasks", async () => {
+  const response = await axios.get("http://localhost:3000/tasks");
+  return response.data;
+});
+
+// Task detayını almak için async thunk
+export const fetchTaskDetail = createAsyncThunk(
+  "tasks/fetchTaskDetail",
+  async (taskId: string) => {
+    const response = await axios.get(`http://localhost:3000/tasks/${taskId}`);
     return response.data;
   }
 );
 
-// Add Task
-export const addTask = createAsyncThunk(
-  'tasks/addTask',
-  async (task: { title: string; description: string }, { getState }) => {
-    interface RootState {
-      auth: {
-        token: string;
-      };
-    }
+// Yeni bir görev oluşturmak için async thunk
+export const createTask = createAsyncThunk(
+  "tasks/createTask",
+  async (taskData: {
+    title: string;
+    description: string;
+    assignees: string[];
+  }) => {
+    const response = await axios.post("http://localhost:3000/tasks", taskData);
+    return response.data;
+  }
+);
 
-    const { token } = (getState() as RootState).auth; // Get token from state
-    const response = await axios.post(
-      'http://localhost:3000/tasks',
-      task,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+// Update Task Thunk
+export const updateTask = createAsyncThunk(
+  "tasks/updateTask",
+  async (taskData: {
+    id: string;
+    title: string;
+    description: string;
+    assignees: string[];
+  }) => {
+    const response = await axios.put(
+      `http://localhost:3000/tasks/${taskData.id}`,
+      taskData
     );
     return response.data;
   }
 );
 
-// Task Slice
+// Task silme işlemi için async thunk
+export const deleteTask = createAsyncThunk(
+  "tasks/deleteTask",
+  async (taskId: string) => {
+    await axios.delete(`http://localhost:3000/tasks/${taskId}`);
+    return taskId; // Silinen task'ın ID'sini dönecek
+  }
+);
+
+// Slice
 const taskSlice = createSlice({
-  name: 'tasks',
+  name: "tasks",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getTasks.pending, (state) => {
+      // Tüm görevleri getirme işlemi
+      .addCase(fetchTasks.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
-      .addCase(getTasks.fulfilled, (state, { payload }) => {
+      .addCase(fetchTasks.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.tasks = payload;
       })
-      .addCase(getTasks.rejected, (state, { error }) => {
+      .addCase(fetchTasks.rejected, (state, { error }) => {
         state.loading = false;
-        state.error = error.message || 'Failed to fetch tasks';
+        state.error = error.message || "Failed to load tasks";
       })
-      .addCase(addTask.pending, (state) => {
+
+      // Task detayını getirme işlemi
+      .addCase(fetchTaskDetail.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchTaskDetail.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.task = payload;
+      })
+      .addCase(fetchTaskDetail.rejected, (state, { error }) => {
+        state.loading = false;
+        state.error = error.message || "Failed to load task detail";
+      })
+
+      // Yeni görev oluşturma işlemi
+      .addCase(createTask.pending, (state) => {
         state.loading = true;
       })
-      .addCase(addTask.fulfilled, (state, { payload }) => {
+      .addCase(createTask.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.tasks.push(payload);
+        state.tasks.push(payload); // Yeni görev listeye ekleniyor
       })
-      .addCase(addTask.rejected, (state, { error }) => {
+      .addCase(createTask.rejected, (state, { error }) => {
         state.loading = false;
-        state.error = error.message || 'Failed to add task';
+        state.error = error.message || "Failed to create task";
+      })
+
+      // Task güncelleme işlemi
+      .addCase(updateTask.pending, (state) => {
+        state.loading = true;
+      })
+      // .addCase(updateTask.fulfilled, (state, { payload }) => {
+      //   state.loading = false;
+      //   const index = state.tasks.findIndex(task => task._id === payload._id);
+      //   if (index >= 0) {
+      //     state.tasks[index] = payload; // Güncellenmiş task, listede yer alacak
+      //   }
+      // })
+      .addCase(updateTask.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        const updatedTasks = state.tasks.map((task) =>
+          task._id === payload.id ? payload : task
+        );
+        state.tasks = updatedTasks;
+        state.task = payload;
+      })
+      .addCase(updateTask.rejected, (state, { error }) => {
+        state.loading = false;
+        state.error = error.message || "Failed to update task";
+      })
+
+      // Task silme işlemi
+      .addCase(deleteTask.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteTask.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.tasks = state.tasks.filter((task) => task._id !== payload); // Silinen task listeden çıkarılıyor
+      })
+      .addCase(deleteTask.rejected, (state, { error }) => {
+        state.loading = false;
+        state.error = error.message || "Failed to delete task";
       });
   },
 });
