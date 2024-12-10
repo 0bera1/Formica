@@ -5,6 +5,7 @@ import { AppDispatch } from '../../redux/store';
 import { createTask } from '../../redux/slices/taskSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import SideBar from '../../components/SideBar';
+import './task.css';
 
 const TaskCreate: React.FC = () => {
   const [form] = Form.useForm();
@@ -70,7 +71,7 @@ const TaskCreate: React.FC = () => {
               <Form.Item>
                 <Button type="primary" htmlType="submit"
                   onClick={() => { navigate('/dashboard') }}
-                  className="w-full py-3 rounded-md bg-indigo-600 text-white text-lg font-medium hover:bg-indigo-700 transition ease-in-out duration-300">
+                  className="custom-button-2">
                   Create Task
                 </Button>
               </Form.Item>
@@ -109,7 +110,7 @@ const TaskCreate: React.FC = () => {
               <Button
                 type="primary"
                 onClick={addAssignee}
-                className="w-full py-3 rounded-md bg-indigo-600 text-white text-lg font-medium hover:bg-indigo-700 transition ease-in-out duration-300">
+                className="custom-button-2">
                 Add Assignee
               </Button>
             </div>

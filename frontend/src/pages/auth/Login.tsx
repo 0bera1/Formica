@@ -5,7 +5,8 @@ import { AppDispatch } from '../../redux/store';
 import { Button, Input, Form, message } from 'antd';
 import { login } from '../../redux/slices/authSlice';
 import { MdEmail } from 'react-icons/md';
-import { FaKey } from 'react-icons/fa';
+import { FaKey, FaTasks } from 'react-icons/fa';
+import './login.css';
 
 const Login: React.FC = () => {
     const [loading, setLoading] = useState(false);
@@ -26,42 +27,79 @@ const Login: React.FC = () => {
     };
 
     return (
-        <div className="flex items-center justify-center h-screen
-            bg-gradient-to-br from-[#242424] via-black to-[#242424]">
-            <div className="p-6 bg-gradient-to-br from-slate-400/20 via-white/15 to-slate-400/20 rounded-lg 
-              lg:w-1/3 lg:h-2/5 backdrop-filter backdrop-blur-xl shadow-xl shadow-black border
-            border-gray-200 md:w-3/5 border-opacity-30 w-11/12 
-            ">
-                <h2 className="text-3xl font-light text-center mb-6 ">Login</h2>
-                <Form layout="vertical" className='space-y-8' onFinish={onFinish}>
-                    <Form.Item
-                        name="email"
-                        rules={[{ required: true, message: 'Please input your email!' }]}
-                    >
-                        <Input type="email" placeholder=" Enter your e-mail" prefix={<MdEmail color='gray' />}
-                            className='py-2 text-base font-light' />
-                    </Form.Item>
-                    <Form.Item
-                        name="password"
-                        rules={[{ required: true, message: 'Please input your password!' }]}
-                    >
-                        <Input.Password placeholder=" Enter your password" prefix={<FaKey color='gray' size={12} />}
-                            className='py-2 text-base font-light'
-                        />
-                    </Form.Item>
-                    <Button
-                        type="default"
-                        htmlType="submit"
-                        loading={loading}
-                        block
-                        className="mt-1 bg-gradient-to-br from-[#242424] via-black to-[#242424] font-bold rounded-xl
-                        border border-blue-500 border-opacity-30 text-white hover:scale-95 transition-all duration-500"
-                    >
-                        Login
-                    </Button>
-                </Form>
+        <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+        <div className="flex w-4/5 max-w-6xl bg-gray-800/50 rounded-xl shadow-2xl overflow-hidden backdrop-blur-lg">
+          {/* Left: Login Form */}
+          <div className="w-1/2 p-10 bg-gradient-to-br from-gray-900 to-gray-800 flex flex-col justify-center">
+            <h2 className="text-4xl font-bold text-gray-100 mb-6 text-center">Welcome Back</h2>
+            <p className="text-gray-400 text-sm text-center mb-8">
+              Login to manage your tasks and collaborate with your team efficiently.
+            </p>
+            <Form layout="vertical" className="space-y-6" onFinish={onFinish}>
+              <Form.Item
+                name="email"
+                rules={[{ required: true, message: "Please input your email!" }]}
+              >
+                <Input
+                  type="email"
+                  placeholder="Email Address"
+                  prefix={<MdEmail className="text-gray-400" size={20} />}
+                  className="custom-input"
+                />
+              </Form.Item>
+              <Form.Item
+                name="password"
+                rules={[{ required: true, message: "Please input your password!" }]}
+              >
+                <Input.Password
+                  placeholder="Password"
+                  prefix={<FaKey className="text-gray-400" size={16} />}
+                  className="custom-input"
+                />
+              </Form.Item>
+              <Button
+                type="default"
+                htmlType="submit"
+                loading={loading}
+                block
+                className="custom-button"
+              >
+                Login
+              </Button>
+            </Form>
+      
+            {/* Register Link */}
+            <div className="text-center mt-6">
+              <p className="text-gray-400 text-sm">
+                Don't have an account?{" "}
+                <a
+                  href="/register"
+                  className="text-blue-500 hover:text-blue-300 transition duration-200"
+                >
+                  Register
+                </a>
+              </p>
             </div>
+          </div>
+      
+          {/* Right: Icon and Slogan */}
+          <div className="w-1/2 bg-gradient-to-br from-blue-700 to-blue-900 flex flex-col items-center justify-center text-white p-10">
+            <div className="bg-white p-6 rounded-full shadow-lg mb-6">
+              {/* Replace with your app logo */}
+              <FaTasks className="text-blue-800" size={64} />
+            </div>
+            <h3 className="text-3xl font-bold mb-4">Task & User Management</h3>
+            <p className="text-center text-lg px-6">
+              Simplify your workflow and achieve more with our intuitive platform.
+            </p>
+          </div>
         </div>
+      </div>
+      
+      
+      
+      
+
     );
 };
 

@@ -1,0 +1,76 @@
+.custom-input {
+    background-color: #2d2d2d81 !important;
+    color: #d4d4d4 !important;
+    border: 1px solid #25539cab !important;
+    border-radius: 10px;
+    padding: 14px;
+  }
+  
+  .custom-input:hover,
+  .custom-input:focus {
+    border-color: #3b82f6 !important; /* Mavi sınır rengi */
+    box-shadow: 0 0 4px #3b82f6 !important;
+  }
+  
+  .custom-input::placeholder {
+    color: #888 !important; /* Placeholder rengini özelleştir */
+  }
+  
+  .ant-input-affix-wrapper {
+    background-color: #354a6bd0 !important;
+    color: #d4d4d4 !important;
+  }
+  /* Autofill için ek stil */
+.custom-input:-webkit-autofill {
+    background-color: #1a202c !important; /* Autofill sırasında beyaz olmaması için arka plan rengi */
+    color: white !important; /* Autofill sırasında yazı rengini beyaz yap */
+    border-color: #ccc !important; /* Kenarlık rengi */
+    background-image: none !important; /* Autofill arka planını kapat */
+  }
+  
+  /* Autofill focus sırasında */
+  .custom-input:-webkit-autofill:focus {
+    background-color: #1a202c !important;
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
+  }
+  
+  .ant-input-affix-wrapper:hover,
+  .ant-input-affix-wrapper:focus {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 4px #3b82f6 !important;
+    
+  }
+  
+  
+  .ant-input::placeholder {
+    color: #7b83ccad !important; /* Placeholder rengi */
+    font-weight: 300;       /* İsteğe bağlı: Yazı kalınlığı */
+    font-size: 0.95rem;     /* Yazı boyutu */
+  }
+  
+
+  .custom-button {
+    background: linear-gradient(to right, #3b82f6, #2563eb); /* Mavi tonlarında arka plan */
+    color: #ffffff !important; /* Yazı rengini beyaz yap */
+    font-weight: 300; /* Yazıyı kalın yap */
+    font-size: 1.2rem; /* Yazı boyutunu ayarla */
+    border-radius: 8px; /* Köşeleri yuvarla */
+    border: none; /* Kenarlıkları kaldır */
+    padding: 12px 20px; /* İç boşluk */
+    transition: all 0.45s ease; /* Animasyon ekle */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Butona hafif bir gölge ekle */
+  }
+  
+  .custom-button:hover {
+    background: linear-gradient(to right, #354a6bd0, #354a6bd0)!important; /* Hover'da farklı bir renk */
+    transform: scale(1.05); /* Hover'da hafif büyüme efekti */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5); /* Hover'da gölge efekti */
+  }
+  
+  .custom-button:active {
+    transform: scale(0.95); /* Tıklama animasyonu */
+    box-shadow: none; /* Tıklamada gölgeyi kaldır */
+  }
+  
+  

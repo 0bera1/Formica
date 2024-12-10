@@ -1,0 +1,18 @@
+.custom-button-2 {
+    background: linear-gradient(to right , #6295cff1, #2563eb,#6295cff1); /* Mavi tonlarında arka plan */
+    color: #ffffff !important; /* Yazı rengini beyaz yap */
+    font-weight: 300; /* Yazıyı kalın yap */
+    font-size: 1.2rem; /* Yazı boyutunu ayarla */
+    border-radius: 8px; /* Köşeleri yuvarla */
+    border: none; /* Kenarlıkları kaldır */
+    padding: 12px 20px; /* İç boşluk */
+    transition: all 0.45s ease; /* Animasyon ekle */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Butona hafif bir gölge ekle */
+    width: 100%;
+}
+.custom-button-2:hover {
+    background: linear-gradient(to right , #6295cfd2, #2564ebfb,#6295cfd2)!important; /* Mavi tonlarında arka plan */
+    transform: scale(1.03); /* Hover'da hafif büyüme efekti */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5); /* Hover'da gölge efekti */
+    transform: translateY(-4px); /* Hover'da yukarı doğru kaydırma */
+}

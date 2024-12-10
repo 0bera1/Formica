@@ -54,7 +54,6 @@ export const createTask = createAsyncThunk(
   }
 );
 
-// Update Task Thunk
 export const updateTask = createAsyncThunk(
   "tasks/updateTask",
   async (taskData: {
@@ -63,13 +62,19 @@ export const updateTask = createAsyncThunk(
     description: string;
     assignees: string[];
   }) => {
+    const updatedTaskData = {
+      ...taskData,
+      updatedAt: new Date().toISOString() // Güncellenme zamanını ekliyoruz
+    };
+
     const response = await axios.put(
       `http://localhost:3000/tasks/${taskData.id}`,
-      taskData
+      updatedTaskData
     );
     return response.data;
   }
 );
+
 
 // Task silme işlemi için async thunk
 export const deleteTask = createAsyncThunk(
