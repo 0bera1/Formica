@@ -235,7 +235,7 @@ const Dashboard: React.FC = () => {
       </div>
 
       {/* Floating Button */}
-      <button className="fixed lg:bottom-12 bottom-12 right-8 lg:right-12 z-10 p-4 bg-gradient-to-br from-blue-500 to-teal-400 text-white rounded-full shadow-lg transition-all hover:scale-125 duration-300 transform">
+      <button className="fixed lg:bottom-20 bottom-12 right-8 lg:right-80 z-10 p-4 bg-gradient-to-br from-blue-500 to-teal-400 text-white rounded-full shadow-lg transition-all hover:scale-125 duration-300 transform">
         <Link to="/task/create" className="flex items-center justify-center">
           <MdOutlinePlaylistAdd size={30} />
         </Link>
