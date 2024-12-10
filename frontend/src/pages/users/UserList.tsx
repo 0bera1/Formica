@@ -4,11 +4,12 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Table, Button, Space, Popconfirm, Modal, Input, Form, message } from "antd";
 import { Link, } from "react-router-dom";
-import { fetchUsers, deleteUser, createUser } from "../../redux/slices/userSlice"; // Redux işlemleri
+import { fetchUsers, deleteUser, } from "../../redux/slices/userSlice"; // Redux işlemleri
 import { RootState } from "../../redux/store"; // Store importu
 import SideBar from "../../components/SideBar";
 import { RiUser6Line } from "react-icons/ri";
 import { MdDelete } from "react-icons/md";
+import { register } from "../../redux/slices/authSlice";
 
 const UserList = () => {
     const dispatch = useDispatch();
@@ -44,7 +45,7 @@ const UserList = () => {
     const handleCreateUser = async () => {
         try {
             const values = await form.validateFields(); // Form doğrulama
-            await dispatch<any>(createUser(values)); // Yeni kullanıcı oluşturma
+            await dispatch<any>(register(values)); // Yeni kullanıcı oluşturma
             dispatch<any>(fetchUsers()); // Listeyi güncelle
             closeModal(); // Modalı kapat
             message.success("User created successfully!");
@@ -80,7 +81,7 @@ const UserList = () => {
                 <Space size="middle">
                     <Link to={`/user/${record._id}`}
                         className="flex border p-2 text-white hover:bg-transparent hover:border-transparent
-                         hover:text-blue-400 bg-blue-400 bg-transparent rounded-xl space-x-2 transition-all duration-500">
+                         hover:text-blue-400 bg-blue-400 rounded-xl space-x-2 transition-all duration-500">
 
                         <RiUser6Line size={20} className="" />
                         <span className="">Show User Details</span>
@@ -95,7 +96,7 @@ const UserList = () => {
                     >
                         <div
                             className="cursor-pointer flex border p-2 text-white hover:bg-transparent hover:border-transparent
-                             hover:text-red-600 bg-red-600 bg-transparent rounded-xl space-x-2 transition-all duration-500">
+                             hover:text-red-600 bg-red-600 rounded-xl space-x-2 transition-all duration-500">
                             <MdDelete size={20} className="" />
                             <a href="#" className="hover:text-red-600">Delete</a>
                         </div>
