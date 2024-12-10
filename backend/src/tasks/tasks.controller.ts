@@ -6,11 +6,13 @@ import {
   Param,
   Put,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { ApiTags, ApiOperation, ApiBody, ApiParam } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @ApiTags('tasks')
 @Controller('tasks')
@@ -20,14 +22,14 @@ export class TasksController {
   @Post()
   @ApiOperation({ summary: 'Create a new task' })
   @ApiBody({ type: CreateTaskDto })
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   async create(@Body() createTaskDto: CreateTaskDto) {
     return this.tasksService.create(createTaskDto);
   }
 
   @Get()
   @ApiOperation({ summary: 'Get all tasks' })
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   async findAll() {
     return this.tasksService.findAll();
   }
@@ -35,7 +37,7 @@ export class TasksController {
   @Get(':id')
   @ApiOperation({ summary: 'Get a task by ID' })
   @ApiParam({ name: 'id', description: 'Task ID' })
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   async findOne(@Param('id') id: string) {
     return this.tasksService.findOne(id);
   }
@@ -44,7 +46,7 @@ export class TasksController {
   @ApiOperation({ summary: 'Update a task' })
   @ApiParam({ name: 'id', description: 'Task ID' })
   @ApiBody({ type: UpdateTaskDto })
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   async update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
     return this.tasksService.update(id, updateTaskDto);
   }
@@ -52,7 +54,7 @@ export class TasksController {
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a task' })
   @ApiParam({ name: 'id', description: 'Task ID' })
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   async remove(@Param('id') id: string) {
     return this.tasksService.remove(id);
   }

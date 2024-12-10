@@ -5,9 +5,12 @@ import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { UsersModule } from '../users/users.module';
 import { JwtStrategy } from './jwt.strategy'; // Strateji burada ekleniyor
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 @Module({
-  imports: [JwtModule.register({ secret: 'your-secret-key' }), UsersModule],
+  imports: [JwtModule.register({ secret: process.env.JWT_SECRET }), UsersModule],
   providers: [AuthService, JwtStrategy], // JwtStrategy burada ekleniyor
   controllers: [AuthController],
 })

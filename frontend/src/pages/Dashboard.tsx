@@ -2,30 +2,38 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '../redux/store';
 import { fetchTasks, deleteTask } from '../redux/slices/taskSlice';
+import { fetchUsers } from '../redux/slices/userSlice'; // Yeni import
 import { Button, Table, Popconfirm } from 'antd';
 import { Link } from 'react-router-dom';
 import { MdOutlinePlaylistAdd, MdDelete } from 'react-icons/md';
 import SideBar from '../components/SideBar';
 
-
 const Dashboard: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { tasks, loading, error } = useSelector((state: RootState) => state.tasks);
+  const { users } = useSelector((state: RootState) => state.users); // Kullanıcıları almak için selector
   useEffect(() => {
     dispatch(fetchTasks());
+    dispatch(fetchUsers()); // Kullanıcıları fetch etmek için
   }, [dispatch]);
 
   const handleDelete = (taskId: string) => {
     dispatch(deleteTask(taskId));
   };
 
+  const getUsernames = (assigneeIds: string[]) => {
+    return assigneeIds.map(id => {
+      const user = users.find(user => user._id === id);
+      return user ? user.username : 'Unknown User';
+    }).join(', ');
+  };
 
   const columns = [
     {
       title: 'Task Title',
       dataIndex: 'title',
       key: 'title',
-      render: (text: string) => <span className="font-medium text-base tracking-wide pl-6 hover:text-blue-800 ">{text}</span>,
+      render: (text: string) => <span className="font-medium text-base tracking-wide px-6 hover:text-blue-800 ">{text}</span>,
     },
     {
       title: 'Description',
@@ -38,7 +46,7 @@ const Dashboard: React.FC = () => {
     title: 'Assignees',
     dataIndex: 'assignees',
     key: 'assignees',
-    render: (assignees: string[]) => (Array.isArray(assignees) ? assignees.join(', ') : '-'),
+    render: (assignees: string[]) => getUsernames(assignees),
     },
 {
   title: 'Created At',

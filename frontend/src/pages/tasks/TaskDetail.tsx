@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Button, Spin, Input, message } from 'antd';
+import { Button, Spin, Input, message, Select, Tag } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../../redux/store';
 import { fetchTaskDetail, updateTask } from '../../redux/slices/taskSlice';
+import { fetchUsers } from '../../redux/slices/userSlice';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import SideBar from '../../components/SideBar';
 
 const { TextArea } = Input;
+const { Option } = Select;
 
 const TaskDetail: React.FC = () => {
   const { id } = useParams();
@@ -17,7 +19,8 @@ const TaskDetail: React.FC = () => {
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [assignees, setAssignees] = useState<string[]>([]);
-  const [newAssignee, setNewAssignee] = useState<string>('');
+  const [users, setUsers] = useState<{ label: string, value: string }[]>([]);
+  const [loadingUsers, setLoadingUsers] = useState<boolean>(true);
 
   useEffect(() => {
     if (id) {
@@ -33,6 +36,23 @@ const TaskDetail: React.FC = () => {
     }
   }, [task]);
 
+  useEffect(() => {
+    // Kullanıcıları getirme işlemi
+    dispatch(fetchUsers())
+      .then((response) => {
+        const formattedUsers = response.payload.map((user: any) => ({
+          label: user.username,
+          value: user._id
+        }));
+        setUsers(formattedUsers);
+        setLoadingUsers(false);
+      })
+      .catch(() => {
+        message.error('Failed to fetch users.');
+        setLoadingUsers(false);
+      });
+  }, [dispatch]);
+
   const handleSaveChanges = () => {
     if (id && (title !== task?.title || description !== task?.description || assignees !== task?.assignees)) {
       dispatch(updateTask({ id, title, description, assignees }))
@@ -45,26 +65,19 @@ const TaskDetail: React.FC = () => {
     }
   };
 
-  const addAssignee = () => {
-    if (newAssignee && !assignees.includes(newAssignee)) {
-      setAssignees((prevAssignees) => [...prevAssignees, newAssignee]);
-      setNewAssignee('');
-    }
+  const handleAssigneeChange = (value: string[]) => {
+    setAssignees(value);
   };
 
-  const removeAssignee = (assignee: string) => {
-    setAssignees((prevAssignees) => prevAssignees.filter(a => a !== assignee));
-  };
-
-  if (loading) {
+  if (loading || loadingUsers) {
     return (
       <>
-      <div className="lg:fixed left-0 top-0">
-        <SideBar />
-      </div>
-      <div className="min-h-screen flex justify-center items-center bg-gray-50">
-        <Spin size="large" />
-      </div>
+        <div className="lg:fixed left-0 top-0">
+          <SideBar />
+        </div>
+        <div className="min-h-screen flex justify-center items-center bg-gray-50">
+          <Spin size="large" />
+        </div>
       </>
     );
   }
@@ -106,50 +119,65 @@ const TaskDetail: React.FC = () => {
               />
             </div>
 
+            <div className="mb-4">
+              <strong>Status:</strong>
+              <Select
+                value={status}
+                onChange={(value) => setStatus(value)}
+                placeholder="Select status"
+                className="w-full"
+              >
+                <Option value="pending">Pending</Option>
+                <Option value="in-progress">In Progress</Option>
+                <Option value="completed">Completed</Option>
+              </Select>
+            </div>
+
             <div className="mt-6 space-y-3 mb-6">
               <p><strong>Created At:</strong> {dayjs(task?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>
               <p><strong>Updated At:</strong> {dayjs(task?.updatedAt).format('YYYY-MM-DD HH:mm:ss')}</p>
             </div>
 
-            <Button type="primary" className="mr-4" onClick={handleSaveChanges}>
-              Save Changes
-            </Button>
+            <div className="flex justify-end space-x-4">
+              <Button type="primary" onClick={handleSaveChanges}>
+                Save Changes
+              </Button>
 
-            <Link to="/dashboard">
-              <Button>Back to Dashboard</Button>
-            </Link>
+              <Link to="/dashboard">
+                <Button>Back to Dashboard</Button>
+              </Link>
+            </div>
           </div>
 
           {/* Sağ Alan: Sidebar (Assign Users) */}
           <div className="lg:w-1/3 bg-gray-50 p-8 space-y-6 rounded-r-xl flex flex-col justify-between">
-            <h3 className="text-xl font-semibold text-gray-900">Assign Users</h3>
+            <h3 className="text-xl font-semibold text-gray-900 mb-4">Assign Users</h3>
 
-            <div className="space-y-3">
-              {assignees.map((assignee, index) => (
-                <Button
-                  key={index}
-                  onClick={() => removeAssignee(assignee)}
-                  type="default"
-                  className="flex justify-between items-center px-5 py-3 bg-red-500 text-white rounded-md hover:bg-red-600 transition ease-in-out duration-300">
-                  {assignee} <span className="ml-2 text-xs font-semibold">X</span>
-                </Button>
+            <div className="mb-4 flex flex-wrap gap-2">
+              {assignees.map(assignee => {
+                const user = users.find(user => user.value === assignee);
+                return user ? (
+                  <Tag key={assignee} color="blue" className="mb-2">
+                    {user.label}
+                  </Tag>
+                ) : null;
+              })}
+            </div>
+
+            <Select
+              mode="multiple"
+              style={{ width: '100%' }}
+              placeholder="Select assignees"
+              value={assignees}
+              onChange={handleAssigneeChange}
+              className="rounded-md border-gray-300 focus:ring-2 focus:ring-indigo-500"
+            >
+              {users.map(user => (
+                <Option key={user.value} value={user.value}>
+                  {user.label}
+                </Option>
               ))}
-            </div>
-
-            <div className="mt-6 space-y-4">
-              <Input
-                value={newAssignee}
-                onChange={(e) => setNewAssignee(e.target.value)}
-                placeholder="Add assignee"
-                className="rounded-md border-gray-300 focus:ring-2 focus:ring-indigo-500 p-4 text-lg w-full"
-              />
-              <Button
-                type="primary"
-                onClick={addAssignee}
-                className="custom-button-2">
-                Add Assignee
-              </Button>
-            </div>
+            </Select>
           </div>
         </div>
       </div>

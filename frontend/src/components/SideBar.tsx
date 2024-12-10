@@ -9,7 +9,7 @@ function SideBar() {
     const navigate = useNavigate();
     const handleLogout = () => {
         // Logout işlemi (örneğin token silme ve yönlendirme)
-        localStorage.removeItem('userToken');
+        localStorage.removeItem('token');
         navigate('/'); // react-router kullanıyorsanız yönlendirme
     };
     return (

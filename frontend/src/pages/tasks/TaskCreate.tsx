@@ -1,18 +1,39 @@
-import React, { useState } from 'react';
-import { Button, Input, Form, message } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Button, Input, Form, message, Select, Tag } from 'antd';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../redux/store';
 import { createTask } from '../../redux/slices/taskSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import SideBar from '../../components/SideBar';
 import './task.css';
+import { fetchUsers } from '../../redux/slices/userSlice'; // Kullanıcıları getirmek için
+
+const { Option } = Select;
 
 const TaskCreate: React.FC = () => {
   const [form] = Form.useForm();
   const dispatch = useDispatch<AppDispatch>();
 
   const [assignees, setAssignees] = useState<string[]>([]);
-  const [newAssignee, setNewAssignee] = useState<string>('');
+  const [users, setUsers] = useState<{ label: string, value: string }[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    // Kullanıcıları getirme işlemi
+    dispatch(fetchUsers())
+      .then((response) => {
+        const formattedUsers = response.payload.map((user: any) => ({
+          label: user.username,
+          value: user._id
+        }));
+        setUsers(formattedUsers);
+        setLoading(false);
+      })
+      .catch(() => {
+        message.error('Failed to fetch users.');
+        setLoading(false);
+      });
+  }, [dispatch]);
 
   const navigate = useNavigate();
   const onFinish = (values: { title: string; description: string; assignees: string[] }) => {
@@ -30,23 +51,20 @@ const TaskCreate: React.FC = () => {
       });
   };
 
-  const addAssignee = () => {
-    if (newAssignee && !assignees.includes(newAssignee)) {
-      setAssignees((prevAssignees) => [...prevAssignees, newAssignee]);
-      setNewAssignee('');
-    }
+  const handleAssigneeChange = (value: string[]) => {
+    setAssignees(value);
   };
 
-  const removeAssignee = (assignee: string) => {
-    setAssignees((prevAssignees) => prevAssignees.filter(a => a !== assignee));
-  };
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
       <div className='lg:fixed left-0 top-0'>
         <SideBar />
       </div>
-      <div className="bg-gray-50   min-h-screen flex justify-center items-center px-4 sm:px-6 lg:px-8"
+      <div className="bg-gray-50 min-h-screen flex justify-center items-center px-4 sm:px-6 lg:px-8"
         style={{ zIndex: -999 }}>
         <div className="w-full max-w-5xl lg:mt-0 mt-14 flex flex-col lg:flex-row bg-white shadow-xl rounded-xl overflow-hidden">
           {/* Sol Alan: Form */}
@@ -88,39 +106,35 @@ const TaskCreate: React.FC = () => {
           <div className="lg:w-1/3 bg-gray-50 p-8 space-y-6 rounded-r-xl flex flex-col justify-between">
             <h3 className="text-xl font-semibold text-gray-900">Assign Users</h3>
 
-            <div className="space-y-3">
-              {assignees.map((assignee, index) => (
-                <Button
-                  key={index}
-                  onClick={() => removeAssignee(assignee)}
-                  type="default"
-                  className="flex justify-between items-center px-5 py-3 bg-red-500 text-white rounded-md hover:bg-red-600 transition ease-in-out duration-300">
-                  {assignee} <span className="ml-2 text-xs font-semibold">X</span>
-                </Button>
-              ))}
+            <div className="mb-4">
+              {assignees.map(assignee => {
+                const user = users.find(user => user.value === assignee);
+                return user ? (
+                  <Tag key={assignee} color="blue" className="mb-2">
+                    {user.label}
+                  </Tag>
+                ) : null;
+              })}
             </div>
 
-            <div className="mt-6 space-y-4">
-              <Input
-                value={newAssignee}
-                onChange={(e) => setNewAssignee(e.target.value)}
-                placeholder="Add assignee"
-                className="rounded-md border-gray-300 focus:ring-2 focus:ring-indigo-500 p-4 text-lg w-full"
-              />
-              <Button
-                type="primary"
-                onClick={addAssignee}
-                className="custom-button-2">
-                Add Assignee
-              </Button>
-            </div>
+            <Select
+              mode="multiple"
+              style={{ width: '100%' }}
+              placeholder="Select assignees"
+              value={assignees}
+              onChange={handleAssigneeChange}
+              className="rounded-md border-gray-300 focus:ring-2 focus:ring-indigo-500"
+            >
+              {users.map(user => (
+                <Option key={user.value} value={user.value}>
+                  {user.label}
+                </Option>
+              ))}
+            </Select>
           </div>
         </div>
       </div>
     </>
-
-
-
   );
 };
 

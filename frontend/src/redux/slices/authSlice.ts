@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
@@ -13,12 +14,31 @@ const initialState: AuthState = {
   error: null,
 };
 
+// Axios interceptor to add token to headers
+axios.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 // Login Thunk
 export const login = createAsyncThunk(
   'auth/login',
-  async (credentials: { email: string; password: string }) => {
-    const response = await axios.post('http://localhost:3000/auth/login', credentials);
-    return response.data.access_token;
+  async (credentials: { email: string; password: string }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post('http://localhost:3000/auth/login', credentials);
+      localStorage.setItem('token', response.data.access_token); // Token'ı localStorage'a kaydet
+      return response.data.access_token;
+    } catch (error) {
+      return rejectWithValue((error as any).response.data);
+    }
   }
 );
 
@@ -38,6 +58,7 @@ const authSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.token = null;
+      localStorage.removeItem('token'); // Token'ı localStorage'dan sil
     },
   },
   extraReducers: (builder) => {

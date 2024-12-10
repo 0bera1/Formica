@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { AppDispatch } from '../../redux/store';
@@ -13,10 +13,18 @@ const Login: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
 
+    useEffect(() => {
+        const isAuthenticated = localStorage.getItem('token');
+        if (isAuthenticated) {
+            navigate('/dashboard');
+        }
+    }, [navigate]);
+
     const onFinish = async (values: { email: string; password: string }) => {
         setLoading(true);
         try {
-            await dispatch(login(values)).unwrap(); // unwrap, başarısızlık durumunda hata fırlatır
+            const token = await dispatch(login(values)).unwrap(); // unwrap, başarısızlık durumunda hata fırlatır
+            localStorage.setItem('token', token); // Token'ı localStorage'a kaydet
             message.success('Login successful!');
             navigate('/dashboard'); // Başarılı giriş sonrası Dashboard'a yönlendirme
         } catch {
