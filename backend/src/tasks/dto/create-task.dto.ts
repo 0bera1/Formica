@@ -1,4 +1,4 @@
-import { IsString, IsOptional } from 'class-validator';
+import { IsString, IsOptional, IsEnum } from 'class-validator';
 
 export class CreateTaskDto {
   @IsString()
@@ -7,4 +7,8 @@ export class CreateTaskDto {
   @IsOptional()
   @IsString()
   description?: string;
+
+  @IsOptional()
+  @IsEnum(['in-progress', 'completed'])
+  status?: string;
 }

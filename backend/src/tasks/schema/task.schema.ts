@@ -18,6 +18,9 @@ export class Task {
   @Prop({ default: Date.now })
   createdAt: Date;
 
+  @Prop({ enum: ['in-progress', 'completed'], default: 'in-progress' })
+  status: string;
+
   @Prop({ default: Date.now })
   updatedAt: Date;
 }

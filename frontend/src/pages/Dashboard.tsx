@@ -2,45 +2,47 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '../redux/store';
 import { fetchTasks, deleteTask, updateTask } from '../redux/slices/taskSlice';
-import { fetchUsers } from '../redux/slices/userSlice'; // Yeni import
-import { Button, Table, Popconfirm, Select, message, Tag, Divider } from 'antd'; // Yeni import
-import moment from 'moment'; // Tarih işlemleri için import
+import { fetchUsers } from '../redux/slices/userSlice';
+import { Button, Table, Popconfirm, Select, message, Tag, Divider } from 'antd';
 import { Link } from 'react-router-dom';
-import { MdOutlinePlaylistAdd, MdDelete } from 'react-icons/md';
+import { MdOutlinePlaylistAdd, MdDelete, MdAssignmentInd } from 'react-icons/md';
+import { AiOutlineClose } from 'react-icons/ai';
 import SideBar from '../components/SideBar';
+import './dashboard.css';
 
 const { Option } = Select;
 
 const Dashboard: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { tasks, loading, error } = useSelector((state: RootState) => state.tasks);
-  const { users } = useSelector((state: RootState) => state.users); // Kullanıcıları almak için selector
+  const { users } = useSelector((state: RootState) => state.users);
 
   const [filteredTasks, setFilteredTasks] = useState(tasks);
   const [selectedAssignees, setSelectedAssignees] = useState<string[]>([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [assignees, setAssignees] = useState<string[]>([]);
+  const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
+  const [isRightSidebarDesktop, setIsRightSidebarDesktop] = useState(true)
 
   useEffect(() => {
     dispatch(fetchTasks());
-    dispatch(fetchUsers()); // Kullanıcıları fetch etmek için
+    dispatch(fetchUsers());
   }, [dispatch]);
 
   useEffect(() => {
     setFilteredTasks(tasks);
   }, [tasks]);
-
   useEffect(() => {
-    let filtered = tasks;
+    const filtered = tasks.filter(task => task.status === "in-progress");
 
     if (selectedAssignees.length > 0) {
-      filtered = filtered.filter(task =>
+      setFilteredTasks(filtered.filter(task =>
         task.assignees.some(assignee => selectedAssignees.includes(assignee))
-      );
+      ));
+    } else {
+      setFilteredTasks(filtered);
     }
-
-    setFilteredTasks(filtered);
-  }, [selectedAssignees, tasks]);
+  }, [tasks, selectedAssignees]);
 
   const handleDelete = (taskId: string) => {
     dispatch(deleteTask(taskId));
@@ -51,10 +53,6 @@ const Dashboard: React.FC = () => {
       const user = users.find(user => user._id === id);
       return user ? user.username : 'Unknown User';
     }).join(', ');
-  };
-
-  const handleAssigneeChange = (value: string[]) => {
-    setAssignees(value);
   };
 
   const handleAddAssignees = async () => {
@@ -71,7 +69,7 @@ const Dashboard: React.FC = () => {
           });
       }
     }
-    dispatch(fetchTasks()); // Görevleri yeniden fetch ederek sayfanın yeniden render edilmesini sağla
+    dispatch(fetchTasks());
   };
 
   const columns = [
@@ -79,13 +77,13 @@ const Dashboard: React.FC = () => {
       title: 'Task Title',
       dataIndex: 'title',
       key: 'title',
-      render: (text: string) => <span className="font-medium text-base tracking-wide px-6 hover:text-blue-800 ">{text}</span>,
+      render: (text: string) => <span className="font-medium tracking-wide px-6 hover:text-blue-800 ">{text}</span>,
     },
     {
       title: 'Description',
       dataIndex: 'description',
       key: 'description',
-      render: (text: string) => text.length > 30 ? <span className="hover:text-blue-800 font-normal text-base tracking-wider transition-all duration-300">{text.slice(0, 29)}....</span>
+      render: (text: string) => text.length > 20 ? <span className="hover:text-blue-800 font-normal text-base tracking-wider transition-all duration-300">{text.slice(0, 15)}....</span>
         : <span className="hover:text-blue-800 font-normal text-base tracking-wider transition-all duration-300">{text}</span>,
     },
     {
@@ -93,6 +91,16 @@ const Dashboard: React.FC = () => {
       dataIndex: 'assignees',
       key: 'assignees',
       render: (assignees: string[]) => getUsernames(assignees),
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+      render: (status: string) => (
+        <Tag color={status === 'completed' ? 'green' : status === 'in-progress' ? 'blue' : 'orange'}>
+          {status.toUpperCase()}
+        </Tag>
+      ),
     },
     {
       title: 'Created At',
@@ -150,48 +158,63 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen ">
+    <div className="flex min-h-screen flex-col lg:mt-0 mt-20 lg:flex-row">
       <SideBar />
-      {/* Main Content Area */}
-      <div className="flex-1 p-8 overflow-y-auto">
-        <h3 className="text-3xl font-semibold text-slate-600 mb-8">Task Overview</h3>
+      <div className="flex-1 lg:px-3 lg:pt-8 lg:p-0 p-8 overflow-y-auto">
+        <div className="flex justify-between items-center mb-8">
+          <h3 className="text-3xl font-semibold ml-5 text-slate-600">Task Overview</h3>
+          <button
+            className="lg:hidden p-2 absolute top-4 bg-white rounded-full right-3 z-50"
+            onClick={() => setIsRightSidebarOpen(!isRightSidebarOpen)}>
+            {isRightSidebarOpen ? <AiOutlineClose size={30} className='' /> : <MdAssignmentInd size={30} />}
+          </button>
+          <div className='z-30 lg:block hidden'>
+            <button
+            onClick={()=> setIsRightSidebarDesktop(!isRightSidebarDesktop)}
+            >
+            {isRightSidebarDesktop ? <AiOutlineClose size={30} /> : <MdAssignmentInd size={30} />}
 
-        {/* Error message */}
-        {error && <p className="text-red-600 bg-red-100 p-4 rounded-lg mb-6 text-lg">{error}</p>}
-
-        {/* Content Card with Table */}
-        <div className="bg-gradient-to-br from-gray-900/5 via-gray-800/5 to-gray-900/5 
-      backdrop-blur-lg backdrop-filter rounded-xl shadow-lg p-6">
-          <div className="overflow-x-auto">
-            <Table
-              columns={columns}
-              dataSource={filteredTasks}
-              rowKey="_id"
-              loading={loading}
-              pagination={{ pageSize: 7 }}
-              bordered
-              rowSelection={rowSelection}
-              footer={() => (
-                <div className="flex justify-end">
-                  <p className="text-gray-600">
-                    Total Tasks: <span className="font-semibold">{filteredTasks.length}</span>
-                  </p>
-                </div>
-              )}
-              style={{
-                background: 'rgba(255, 255, 255,0.5)',
-                borderRadius: '2rem',
-                overflow: 'hidden',
-              }}
-              rowClassName="text-gray-800"
-            />
+            </button>
           </div>
         </div>
-      </div>
 
-      {/* Filter Sidebar */}
-      <div className="w-64 p-4 bg-white shadow-lg rounded-lg">
-        <h4 className="text-xl font-semibold mb-4">Filters</h4>
+        {error && <p className="text-red-600 bg-red-100 p-4 rounded-lg mb-6 text-lg">{error}</p>}
+
+        <div className={`${isRightSidebarDesktop ? 'lg:-translate-x-0 lg:mr-72':'lg:translate-x-0'} transition-all duration-500 lg:mx-5
+          `}>
+          <Table
+            columns={columns}
+            dataSource={filteredTasks}
+            rowKey="_id"
+            loading={loading}
+            pagination={{ pageSize: 7 }}
+            bordered
+            rowSelection={rowSelection}
+            footer={() => (
+              <div className="flex justify-end ">
+                <p className="text-gray-600">
+                  Total Tasks: <span className="font-semibold">{filteredTasks.length}</span>
+                </p>
+              </div>
+            )}
+            style={{
+              background: 'rgba(255, 255, 255,0.5)',
+              borderRadius: '2rem',
+              overflow: 'auto',
+            }}
+            rowClassName="text-gray-800"
+          />
+        </div>
+      </div>
+      <div className={`fixed top-0 right-0 lg:h-screen h-full w-64 p-4 bg-white shadow-lg rounded-lg transform 
+        transition-transform duration-300
+        z-20  ${isRightSidebarDesktop ? 'lg:translate-x-0':'lg:translate-x-full'}
+      ${isRightSidebarOpen ? 'translate-x-0' : 'translate-x-full'}  
+        `}>
+        <div className="flex justify-between items-center mb-4">
+          <h4 className="text-xl font-semibold mt-2">More</h4>
+
+        </div>
         <div className="mb-4">
           <label className="block text-gray-700">Assignees</label>
           <Select
@@ -234,15 +257,18 @@ const Dashboard: React.FC = () => {
         </Button>
       </div>
 
-      {/* Floating Button */}
-      <button className="fixed lg:bottom-20 bottom-12 right-8 lg:right-80 z-10 p-4 bg-gradient-to-br from-blue-500 to-teal-400 text-white rounded-full shadow-lg transition-all hover:scale-125 duration-300 transform">
+
+          {/* Floating Button */}
+      <button 
+      className={`fixed lg:bottom-20 bottom-12 right-8 lg:right-80 z-10 p-4 bg-gradient-to-br from-blue-500 to-teal-400 text-white rounded-full shadow-lg transition-all hover:scale-125 duration-300 transform
+        ${isRightSidebarDesktop ? 'lg:-translate-x-0 ':'lg:translate-x-60'}
+      `}>
         <Link to="/task/create" className="flex items-center justify-center">
           <MdOutlinePlaylistAdd size={30} />
         </Link>
       </button>
     </div>
   );
-
 };
 
 export default Dashboard;

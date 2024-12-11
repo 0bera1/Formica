@@ -1,5 +1,5 @@
 import React from 'react'
-import { MdExitToApp, MdGroup, MdMenu, MdOutlinePlaylistAdd } from 'react-icons/md'
+import { MdExitToApp, MdGroup, MdMenu, MdOutlineClose, MdOutlinePlaylistAdd } from 'react-icons/md'
 import { RxDashboard } from 'react-icons/rx';
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -17,10 +17,10 @@ function SideBar() {
 
             <div
                 className={`space-y-3 fixed top-0 left-0 w-64 h-screen bg-gradient-to-br from-blue-500 to-teal-400 text-white p-6 flex flex-col 
-      justify-between rounded-r-sm shadow-lg transform ${isMenuOpen ? 'translate-x-0 ' : '-translate-x-full'} transition-transform duration-300 
-      ease-in-out md:block md:relative md:translate-x-0 z-20`}>
+      justify-center lg:justify-between rounded-r-sm shadow-lg transform ${isMenuOpen ? 'translate-x-0 ' : '-translate-x-full'} transition-transform duration-300 
+      ease-in-out md:block md:relative md:translate-x-0 z-50`}>
 
-                <div>
+                <div className='justify-center items-center flex flex-col'>
                     <h2 className="text-2xl font-semibold text-white mb-10">Management App</h2>
                     <nav className="flex flex-col space-y-3">
                         <Link
@@ -42,6 +42,13 @@ function SideBar() {
                             <span>Dashboard</span>
 
                         </Link>
+                        <Link
+                            to={'/tasks/completed'}
+                            className="flex items-center space-x-4 text-lg text-gray-200 hover:text-indigo-400 transition-all font-medium p-2 rounded-md hover:bg-gray-700">
+                            <RxDashboard size={24} />
+                            <span>Completed Tasks</span>
+
+                        </Link>
                     </nav>
                 </div>
 
@@ -58,9 +65,9 @@ function SideBar() {
 
             {/* Mobile Hamburger Menu Button */}
             < button
-                className="lg:hidden p-4 absolute top-4 right-4 z-50"
+                className="lg:hidden p-2 absolute top-4 bg-white rounded-full left-4 z-50"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}>
-                <MdMenu size={30} className="text-blue-500" />
+                {isMenuOpen ? <MdOutlineClose size={30} className="text-blue-500" /> : <MdMenu size={30} className="text-blue-500" />}
             </button >
         </>
     )

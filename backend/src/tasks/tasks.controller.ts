@@ -7,6 +7,8 @@ import {
   Put,
   Delete,
   UseGuards,
+  Query,
+  Patch,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -28,10 +30,10 @@ export class TasksController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Get all tasks' })
+  @ApiOperation({ summary: 'Get all tasks with optional status filtering' })
   @UseGuards(JwtAuthGuard)
-  async findAll() {
-    return this.tasksService.findAll();
+  async findAll(@Query('status') status?: string) {
+    return this.tasksService.findAll(status ? { status } : {});
   }
 
   @Get(':id')
@@ -49,6 +51,22 @@ export class TasksController {
   @UseGuards(JwtAuthGuard)
   async update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
     return this.tasksService.update(id, updateTaskDto);
+  }
+
+  @Patch(':id/status')
+  @ApiOperation({ summary: 'Update task status' })
+  @ApiParam({ name: 'id', description: 'Task ID' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        status: { type: 'string', enum: ['in-progress', 'completed'] },
+      },
+    },
+  })
+  @UseGuards(JwtAuthGuard)
+  async updateStatus(@Param('id') id: string, @Body('status') status: string) {
+    return this.tasksService.update(id, { status });
   }
 
   @Delete(':id')

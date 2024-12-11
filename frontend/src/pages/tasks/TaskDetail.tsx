@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button, Spin, Input, message, Select, Tag } from 'antd';
@@ -21,6 +22,7 @@ const TaskDetail: React.FC = () => {
   const [assignees, setAssignees] = useState<string[]>([]);
   const [users, setUsers] = useState<{ label: string, value: string }[]>([]);
   const [loadingUsers, setLoadingUsers] = useState<boolean>(true);
+  const [status, setStatus] = useState<string | undefined>(task?.status);
 
   useEffect(() => {
     if (id) {
@@ -54,8 +56,9 @@ const TaskDetail: React.FC = () => {
   }, [dispatch]);
 
   const handleSaveChanges = () => {
-    if (id && (title !== task?.title || description !== task?.description || assignees !== task?.assignees)) {
-      dispatch(updateTask({ id, title, description, assignees }))
+    // İçeride status'e bağlı değişiklik eklenmeli:
+    if (id && (title !== task?.title || description !== task?.description || assignees !== task?.assignees || status !== task?.status)) {
+      dispatch(updateTask({ id, title, description, assignees, status }))
         .then(() => {
           message.success('Changes saved successfully!');
         })
@@ -63,6 +66,7 @@ const TaskDetail: React.FC = () => {
           message.error('Failed to save changes.');
         });
     }
+
   };
 
   const handleAssigneeChange = (value: string[]) => {
@@ -124,7 +128,7 @@ const TaskDetail: React.FC = () => {
               <Select
                 value={status}
                 onChange={(value) => setStatus(value)}
-                placeholder="Select status"
+                placeholder={task?.status}
                 className="w-full"
               >
                 <Option value="pending">Pending</Option>

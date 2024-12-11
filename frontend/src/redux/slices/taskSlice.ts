@@ -1,3 +1,4 @@
+// taskSlice.ts
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -7,6 +8,7 @@ export interface Task {
   title: string;
   description: string;
   assignees: string[];
+  status: string; // Yeni durum alanı eklendi
   createdAt: string;
   updatedAt: string;
 }
@@ -26,11 +28,16 @@ const initialState: TaskState = {
   error: null,
 };
 
-// Getirilecek tüm görevleri fetch etmek için async thunk
-export const fetchTasks = createAsyncThunk("tasks/fetchTasks", async () => {
-  const response = await axios.get("http://localhost:3000/tasks");
-  return response.data;
-});
+// Görevleri durum filtresiyle fetch etmek için async thunk
+export const fetchTasks = createAsyncThunk(
+  "tasks/fetchTasks",
+  async (status?: string) => {
+    const response = await axios.get("http://localhost:3000/tasks", {
+      params: { status },
+    });
+    return response.data;
+  }
+);
 
 // Task detayını almak için async thunk
 export const fetchTaskDetail = createAsyncThunk(
@@ -48,6 +55,7 @@ export const createTask = createAsyncThunk(
     title: string;
     description: string;
     assignees: string[];
+    status?: string; // Opsiyonel durum ekleme
   }) => {
     const response = await axios.post("http://localhost:3000/tasks", taskData);
     return response.data;
@@ -58,30 +66,37 @@ export const updateTask = createAsyncThunk(
   "tasks/updateTask",
   async (taskData: {
     id: string;
-    title: string;
-    description: string;
-    assignees: string[];
+    title?: string;
+    description?: string;
+    assignees?: string[];
+    status?: string;
   }) => {
-    const updatedTaskData = {
-      ...taskData,
-      updatedAt: new Date().toISOString() // Güncellenme zamanını ekliyoruz
-    };
-
     const response = await axios.put(
       `http://localhost:3000/tasks/${taskData.id}`,
-      updatedTaskData
+      taskData
     );
     return response.data;
   }
 );
 
+// Görev durumunu güncellemek için async thunk
+export const updateTaskStatus = createAsyncThunk(
+  "tasks/updateTaskStatus",
+  async ({ id, status }: { id: string; status: string }) => {
+    const response = await axios.patch(
+      `http://localhost:3000/tasks/${id}/status`,
+      { status }
+    );
+    return response.data;
+  }
+);
 
 // Task silme işlemi için async thunk
 export const deleteTask = createAsyncThunk(
   "tasks/deleteTask",
   async (taskId: string) => {
     await axios.delete(`http://localhost:3000/tasks/${taskId}`);
-    return taskId; // Silinen task'ın ID'sini dönecek
+    return taskId;
   }
 );
 
@@ -126,7 +141,7 @@ const taskSlice = createSlice({
       })
       .addCase(createTask.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.tasks.push(payload); // Yeni görev listeye ekleniyor
+        state.tasks.push(payload);
       })
       .addCase(createTask.rejected, (state, { error }) => {
         state.loading = false;
@@ -137,24 +152,31 @@ const taskSlice = createSlice({
       .addCase(updateTask.pending, (state) => {
         state.loading = true;
       })
-      // .addCase(updateTask.fulfilled, (state, { payload }) => {
-      //   state.loading = false;
-      //   const index = state.tasks.findIndex(task => task._id === payload._id);
-      //   if (index >= 0) {
-      //     state.tasks[index] = payload; // Güncellenmiş task, listede yer alacak
-      //   }
-      // })
       .addCase(updateTask.fulfilled, (state, { payload }) => {
         state.loading = false;
-        const updatedTasks = state.tasks.map((task) =>
-          task._id === payload.id ? payload : task
+        state.tasks = state.tasks.map((task) =>
+          task._id === payload._id ? payload : task
         );
-        state.tasks = updatedTasks;
         state.task = payload;
       })
       .addCase(updateTask.rejected, (state, { error }) => {
         state.loading = false;
         state.error = error.message || "Failed to update task";
+      })
+
+      // Task durum güncelleme işlemi
+      .addCase(updateTaskStatus.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateTaskStatus.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.tasks = state.tasks.map((task) =>
+          task._id === payload._id ? payload : task
+        );
+      })
+      .addCase(updateTaskStatus.rejected, (state, { error }) => {
+        state.loading = false;
+        state.error = error.message || "Failed to update task status";
       })
 
       // Task silme işlemi
@@ -163,7 +185,7 @@ const taskSlice = createSlice({
       })
       .addCase(deleteTask.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.tasks = state.tasks.filter((task) => task._id !== payload); // Silinen task listeden çıkarılıyor
+        state.tasks = state.tasks.filter((task) => task._id !== payload);
       })
       .addCase(deleteTask.rejected, (state, { error }) => {
         state.loading = false;

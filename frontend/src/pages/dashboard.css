@@ -1,0 +1,93 @@
+/* Add this CSS to make the table responsive */
+.ant-table-wrapper {
+    overflow-x: auto;
+  }
+  
+  .ant-table {
+    min-width: 600px; /* Adjust as needed */
+  }
+  @media (max-width: 768px) {
+    .table-container {
+      overflow-x: auto;
+    }
+  
+    .table-container table {
+      min-width: 600px;
+    }
+  }
+  /* dashboard.css */
+@media (max-width: 768px) {
+    /* Mobil görünüm */
+    .text-xs {
+      font-size: 0.75rem;
+    }
+    .text-base {
+      font-size: 1rem;
+    }
+    .text-lg {
+      font-size: 1.125rem;
+    }
+    .text-xl {
+      font-size: 1.25rem;
+    }
+    .text-3xl {
+      font-size: 1.875rem;
+    }
+  }
+  
+  @media (min-width: 1024px) and (max-width: 1366px) {
+    /* 13 inç ekran */
+    .text-xs {
+      font-size: 0.875rem;
+    }
+    .text-base {
+      font-size: 1.125rem;
+    }
+    .text-lg {
+      font-size: 1.25rem;
+    }
+    .text-xl {
+      font-size: 1.5rem;
+    }
+    .text-3xl {
+      font-size: 2rem;
+    }
+  }
+  
+  @media (min-width: 1600px) and (max-width: 1920px) {
+    /* 20 inç ekran */
+    .text-xs {
+      font-size: 1rem;
+    }
+    .text-base {
+      font-size: 1.25rem;
+    }
+    .text-lg {
+      font-size: 1.5rem;
+    }
+    .text-xl {
+      font-size: 1.75rem;
+    }
+    .text-3xl {
+      font-size: 2.25rem;
+    }
+  }
+  
+  @media (min-width: 1921px) {
+    /* 24 inç ekran */
+    .text-xs {
+      font-size: 1.125rem;
+    }
+    .text-base {
+      font-size: 1.5rem;
+    }
+    .text-lg {
+      font-size: 1.75rem;
+    }
+    .text-xl {
+      font-size: 2rem;
+    }
+    .text-3xl {
+      font-size: 2.5rem;
+    }
+  }

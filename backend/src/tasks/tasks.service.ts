@@ -1,3 +1,4 @@
+// task.service.ts
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -14,8 +15,8 @@ export class TasksService {
     return newTask.save();
   }
 
-  async findAll(): Promise<Task[]> {
-    return this.taskModel.find().sort({ createdAt: -1 }).exec(); // Tarihe göre sıralıyoruz
+  async findAll(filter = {}): Promise<Task[]> {
+    return this.taskModel.find(filter).sort({ createdAt: -1 }).exec(); // Durum filtresiyle sıralıyoruz
   }
 
   async findOne(id: string): Promise<Task> {
