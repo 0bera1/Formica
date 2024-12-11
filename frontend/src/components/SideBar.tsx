@@ -1,5 +1,5 @@
 import React from 'react'
-import { MdExitToApp, MdGroup, MdMenu, MdOutlineClose, MdOutlinePlaylistAdd } from 'react-icons/md'
+import { MdExitToApp, MdGroup, MdMenu, MdOutlineClose, MdOutlinePlaylistAdd, MdTaskAlt } from 'react-icons/md'
 import { RxDashboard } from 'react-icons/rx';
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -45,7 +45,7 @@ function SideBar() {
                         <Link
                             to={'/tasks/completed'}
                             className="flex items-center space-x-4 text-lg text-gray-200 hover:text-indigo-400 transition-all font-medium p-2 rounded-md hover:bg-gray-700">
-                            <RxDashboard size={24} />
+                            <MdTaskAlt size={24} />
                             <span>Completed Tasks</span>
 
                         </Link>

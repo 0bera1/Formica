@@ -8,6 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import SideBar from '../../components/SideBar';
 import './task.css';
 import { fetchUsers } from '../../redux/slices/userSlice'; // Kullanıcıları getirmek için
+import TopBar from '../../components/TopBar';
 
 const { Option } = Select;
 
@@ -64,6 +65,7 @@ const TaskCreate: React.FC = () => {
     <>
       <div className='lg:fixed left-0 top-0'>
         <SideBar />
+        <TopBar />
       </div>
       <div className="bg-gray-50 min-h-screen flex justify-center items-center px-4 sm:px-6 lg:px-8"
         style={{ zIndex: -999 }}>

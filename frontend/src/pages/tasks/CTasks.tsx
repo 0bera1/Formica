@@ -7,11 +7,14 @@ import { Table, Button, Tag, message, Popconfirm } from 'antd';
 import { Link } from 'react-router-dom';
 import SideBar from '../../components/SideBar';
 import '../dashboard.css';
+import { MdDelete } from 'react-icons/md';
+import TopBar from '../../components/TopBar';
 
 const CTasks: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { tasks, loading, error } = useSelector((state: RootState) => state.tasks);
   const [completedTasks, setCompletedTasks] = useState<Task[]>([]);
+  const { users } = useSelector((state: RootState) => state.users);
 
   useEffect(() => {
     dispatch(fetchTasks());
@@ -31,6 +34,12 @@ const CTasks: React.FC = () => {
     }
   };
 
+  const getUsernames = (assigneeIds: string[]) => {
+    return assigneeIds.map(id => {
+      const user = users.find(user => user._id === id);
+      return user ? user.username : 'Unknown User';
+    }).join(', ');
+  };
   const columns = [
     {
       title: 'Task Title',
@@ -48,10 +57,10 @@ const CTasks: React.FC = () => {
           : <span className="hover:text-blue-800 font-normal tracking-wider">{text}</span>,
     },
     {
-      title: 'Created At',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
-      render: (createdAt: string) => new Date(createdAt).toLocaleString(),
+      title: 'Assignees',
+      dataIndex: 'assignees',
+      key: 'assignees',
+      render: (assignees: string[]) => getUsernames(assignees),
     },
     {
       title: 'Status',
@@ -60,6 +69,12 @@ const CTasks: React.FC = () => {
       render: (status: string) => (
         <Tag color={status === 'completed' ? 'green' : 'volcano'}>{status.toUpperCase()}</Tag>
       ),
+    },
+    {
+      title: 'Created At',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      render: (createdAt: string) => new Date(createdAt).toLocaleString(),
     },
     {
       title: 'Actions',
@@ -78,7 +93,7 @@ const CTasks: React.FC = () => {
             cancelText="No"
           >
             <Button danger className="hover:scale-90 transition-all duration-200">
-              Delete
+              <MdDelete size={20} />
             </Button>
           </Popconfirm>
         </div>
@@ -89,9 +104,10 @@ const CTasks: React.FC = () => {
   return (
     <div className="flex min-h-screen flex-col lg:mt-0 mt-20 lg:flex-row">
       <SideBar />
+      <TopBar />
       <div className="flex-1 p-8 overflow-y-auto">
         <div className="flex justify-between items-center mb-8">
-          <h3 className="text-3xl font-semibold text-slate-600">Completed Tasks</h3>
+          <h3 className="text-3xl font-semibold ">Completed Tasks</h3>
         </div>
 
         {error && <p className="text-red-600 bg-red-100 p-4 rounded-lg mb-6 text-lg">{error}</p>}
@@ -107,7 +123,7 @@ const CTasks: React.FC = () => {
             bordered
             footer={() => (
               <div className="flex justify-end">
-                <p className="text-gray-600">
+                <p className="">
                   Total Completed Tasks: <span className="font-semibold">{completedTasks.length}</span>
                 </p>
               </div>
@@ -117,7 +133,6 @@ const CTasks: React.FC = () => {
               borderRadius: '2rem',
               overflow: 'auto',
             }}
-            rowClassName="text-gray-800"
           />
         </div>
       </div>

@@ -9,6 +9,7 @@ import { MdOutlinePlaylistAdd, MdDelete, MdAssignmentInd } from 'react-icons/md'
 import { AiOutlineClose } from 'react-icons/ai';
 import SideBar from '../components/SideBar';
 import './dashboard.css';
+import TopBar from '../components/TopBar';
 
 const { Option } = Select;
 
@@ -48,7 +49,7 @@ const Dashboard: React.FC = () => {
     dispatch(deleteTask(taskId));
   };
 
-  const getUsernames = (assigneeIds: string[]) => {
+   const getUsernames = (assigneeIds: string[]) => {
     return assigneeIds.map(id => {
       const user = users.find(user => user._id === id);
       return user ? user.username : 'Unknown User';
@@ -160,9 +161,10 @@ const Dashboard: React.FC = () => {
   return (
     <div className="flex min-h-screen flex-col lg:mt-0 mt-20 lg:flex-row">
       <SideBar />
+      <TopBar/>
       <div className="flex-1 lg:px-3 lg:pt-8 lg:p-0 p-8 overflow-y-auto">
         <div className="flex justify-between items-center mb-8">
-          <h3 className="text-3xl font-semibold ml-5 text-slate-600">Task Overview</h3>
+          <h3 className="text-3xl font-semibold ml-5 ">Task Overview</h3>
           <button
             className="lg:hidden p-2 absolute top-4 bg-white rounded-full right-3 z-50"
             onClick={() => setIsRightSidebarOpen(!isRightSidebarOpen)}>
@@ -192,7 +194,7 @@ const Dashboard: React.FC = () => {
             rowSelection={rowSelection}
             footer={() => (
               <div className="flex justify-end ">
-                <p className="text-gray-600">
+                <p className="">
                   Total Tasks: <span className="font-semibold">{filteredTasks.length}</span>
                 </p>
               </div>
@@ -202,7 +204,6 @@ const Dashboard: React.FC = () => {
               borderRadius: '2rem',
               overflow: 'auto',
             }}
-            rowClassName="text-gray-800"
           />
         </div>
       </div>
@@ -216,7 +217,7 @@ const Dashboard: React.FC = () => {
 
         </div>
         <div className="mb-4">
-          <label className="block text-gray-700">Assignees</label>
+          <label className="block my-1 ml-1">Assignees Filter</label>
           <Select
             mode="multiple"
             style={{ width: '100%' }}

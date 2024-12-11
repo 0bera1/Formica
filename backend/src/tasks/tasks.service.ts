@@ -25,7 +25,11 @@ export class TasksService {
 
   async update(id: string, updateTaskDto: UpdateTaskDto): Promise<Task> {
     return this.taskModel
-      .findByIdAndUpdate(id, updateTaskDto, { new: true })
+      .findByIdAndUpdate(
+        id,
+        { ...updateTaskDto, updatedAt: new Date() }, // updatedAt elle güncelleniyor
+        { new: true },
+      )
       .exec();
   }
 

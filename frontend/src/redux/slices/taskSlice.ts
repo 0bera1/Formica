@@ -66,14 +66,18 @@ export const updateTask = createAsyncThunk(
   "tasks/updateTask",
   async (taskData: {
     id: string;
-    title?: string;
-    description?: string;
+    title: string;
+    description: string;
     assignees?: string[];
     status?: string;
   }) => {
+    const updatedTaskData = {
+      ...taskData,
+      updateAt: new Date().toISOString(), // Güncelleme tarihi eklendi
+    };
     const response = await axios.put(
       `http://localhost:3000/tasks/${taskData.id}`,
-      taskData
+      updatedTaskData
     );
     return response.data;
   }

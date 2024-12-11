@@ -9,6 +9,7 @@ import { fetchUsers } from '../../redux/slices/userSlice';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import SideBar from '../../components/SideBar';
+import TopBar from '../../components/TopBar';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -78,6 +79,8 @@ const TaskDetail: React.FC = () => {
       <>
         <div className="lg:fixed left-0 top-0">
           <SideBar />
+          <TopBar />
+
         </div>
         <div className="min-h-screen flex justify-center items-center bg-gray-50">
           <Spin size="large" />
