@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
@@ -14,7 +13,12 @@ function Register() {
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
 
-    const onFinish = async (values: { username: string; email: string; password: string }) => {
+    const onFinish = async (values: { username: string; email: string; password: string; confirmPassword: string }) => {
+        if (values.password !== values.confirmPassword) {
+            message.error("Passwords do not match!");
+            return;
+        }
+
         setLoading(true);
         try {
             await dispatch(register(values)).unwrap(); // unwrap, başarısızlık durumunda hata fırlatır
@@ -69,6 +73,16 @@ function Register() {
                                 className="custom-input"
                             />
                         </Form.Item>
+                        <Form.Item
+                            name="confirmPassword"
+                            rules={[{ required: true, message: "Please confirm your password!" }]}
+                        >
+                            <Input.Password
+                                placeholder="Confirm Password"
+                                prefix={<FaKey className="text-gray-400" size={16} />}
+                                className="custom-input"
+                            />
+                        </Form.Item>
                         <Button
                             type="default"
                             htmlType="submit"
@@ -76,19 +90,19 @@ function Register() {
                             block
                             className="custom-button"
                         >
-                            Login
+                            Register
                         </Button>
                     </Form>
 
                     {/* Register Link */}
                     <div className="text-center mt-6">
                         <p className="text-gray-400 text-sm">
-                            Don't have an account?{" "}
+                            Are you have an account ? {" "}
                             <a
-                                href="/register"
+                                href="/"
                                 className="text-blue-500 hover:text-blue-300 transition duration-200"
                             >
-                                Register
+                                Login
                             </a>
                         </p>
                     </div>
