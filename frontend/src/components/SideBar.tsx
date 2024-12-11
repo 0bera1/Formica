@@ -16,7 +16,7 @@ function SideBar() {
         <>
 
             <div
-                className={`space-y-3 fixed top-0 left-0 w-64 h-screen bg-gradient-to-b from-blue-600 via-blue-800 to-blue-900 text-white p-6 flex flex-col 
+                className={`space-y-3 fixed top-0 left-0 w-64 h-screen bg-gradient-to-br from-blue-500 to-teal-400 text-white p-6 flex flex-col 
       justify-between rounded-r-sm shadow-lg transform ${isMenuOpen ? 'translate-x-0 ' : '-translate-x-full'} transition-transform duration-300 
       ease-in-out md:block md:relative md:translate-x-0 z-20`}>
 

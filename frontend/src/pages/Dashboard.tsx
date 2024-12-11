@@ -85,7 +85,7 @@ const Dashboard: React.FC = () => {
       title: 'Description',
       dataIndex: 'description',
       key: 'description',
-      render: (text: string) => text.length > 50 ? <span className="hover:text-blue-800 font-normal text-base tracking-wider transition-all duration-300">{text.slice(0, 50)}....</span>
+      render: (text: string) => text.length > 30 ? <span className="hover:text-blue-800 font-normal text-base tracking-wider transition-all duration-300">{text.slice(0, 29)}....</span>
         : <span className="hover:text-blue-800 font-normal text-base tracking-wider transition-all duration-300">{text}</span>,
     },
     {
