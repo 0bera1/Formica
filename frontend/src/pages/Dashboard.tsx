@@ -60,6 +60,10 @@ const Dashboard: React.FC = () => {
   };
 
   const handleAddAssignees = async () => {
+    if (selectedRowKeys.length === 0) {
+      message.warning('Please select a row first.');
+      return;
+    }
     for (const key of selectedRowKeys) {
       const task = tasks.find(task => task._id === key);
       if (task) {
