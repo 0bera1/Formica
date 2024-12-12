@@ -272,16 +272,19 @@ const Dashboard: React.FC = () => {
             dataSource={sortedTasks}
             rowKey="_id"
             loading={loading}
-            pagination={{ pageSize: 7 }}
-            bordered
-            rowSelection={rowSelection}
+            pagination={{
+              pageSize: 7,
+              position: ['bottomLeft'],
+            }}
             footer={() => (
-              <div className="flex justify-end ">
-                <p className="">
+              <div className="flex flex-col items-start">
+                <p className="mb-2">
                   Total Tasks: <span className="font-semibold">{filteredTasks.length}</span>
                 </p>
               </div>
             )}
+            bordered
+            rowSelection={rowSelection}
             style={{
               background: 'rgba(255, 255, 255,0.5)',
               borderRadius: '2rem',
@@ -345,10 +348,10 @@ const Dashboard: React.FC = () => {
       {/* Floating Button */}
       <button
         className={`fixed lg:bottom-16 bottom-12 right-8 lg:right-80 z-10 p-4 bg-gradient-to-br hover:from-teal-400 hover:to-blue-500 from-blue-500 to-teal-400 text-white rounded-full shadow-lg transition-all hover:scale-125 duration-300 transform
-        ${isRightSidebarDesktop ? 'lg:-translate-x-0 ' : 'lg:translate-x-40'}
+        ${isRightSidebarDesktop ? 'lg:-translate-x-0 ' : 'lg:translate-x-60'}
       `}>
         <Link to="/task/create" className="flex items-center justify-center">
-          <MdOutlinePlaylistAdd size={30} />
+          <MdOutlinePlaylistAdd size={36} />
         </Link>
       </button>
     </div>
