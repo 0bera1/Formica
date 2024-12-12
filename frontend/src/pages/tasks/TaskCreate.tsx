@@ -47,6 +47,7 @@ const TaskCreate: React.FC = () => {
       .then(() => {
         message.success('Task created successfully!');
         form.resetFields();
+        navigate('/dashboard'); // Yönlendirme burada yapılacak
       })
       .catch(() => {
         message.error('Failed to create task.');
@@ -94,10 +95,28 @@ const TaskCreate: React.FC = () => {
                 <Input.TextArea className="rounded-md border-gray-300 focus:ring-2 focus:ring-indigo-500 p-4 text-lg" rows={5} />
               </Form.Item>
 
+              <Form.Item
+                name="assignees"
+                label="Assignees"
+                rules={[{ required: true, message: 'Please select at least one assignee!' }]}>
+                <Select
+                  mode="multiple"
+                  style={{ width: '100%' }}
+                  placeholder="Select assignees"
+                  value={assignees}
+                  onChange={handleAssigneeChange}
+                  className="rounded-md border-gray-300 focus:ring-2 focus:ring-indigo-500"
+                >
+                  {users.map(user => (
+                    <Option key={user.value} value={user.value}>
+                      {user.label}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+
               <Form.Item>
-                <Button type="primary" htmlType="submit"
-                  onClick={() => { navigate('/dashboard') }}
-                  className="custom-button-2">
+                <Button type="primary" htmlType="submit" className="custom-button-2">
                   Create Task
                 </Button>
               </Form.Item>
