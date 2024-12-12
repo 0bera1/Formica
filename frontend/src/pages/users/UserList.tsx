@@ -134,7 +134,7 @@ const UserList = () => {
                             dataSource={users}
                             rowKey="_id"
                             loading={loading}
-                            pagination={{ pageSize: 10 }}
+                            pagination={{ pageSize: 7 }}
                             bordered
                             footer={() => (
                                 <div className="flex justify-end">
