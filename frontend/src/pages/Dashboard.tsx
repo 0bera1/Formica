@@ -320,7 +320,8 @@ const Dashboard: React.FC = () => {
           </Select>
         </div>
         <Divider />
-        <h4 className="text-xl font-semibold mb-4">Change Assignees</h4>
+        <h4 className="text-xl font-semibold mb-1">Change Assignees</h4>
+        <p className="text-xs text-gray-500 mb-4">To change, add, or remove assignees, first <strong>select</strong> rows from the table.</p>
         <div className="mb-4 flex flex-col gap-2">
           {users.map(user => (
             <Tag
