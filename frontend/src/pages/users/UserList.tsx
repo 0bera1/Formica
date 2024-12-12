@@ -46,6 +46,10 @@ const UserList = () => {
     const handleCreateUser = async () => {
         try {
             const values = await form.validateFields(); // Form doğrulama
+            if (values.password !== values.confirmPassword) {
+                message.error("Passwords do not match");
+                return;
+            }
             await dispatch<any>(register(values)); // Yeni kullanıcı oluşturma
             dispatch<any>(fetchUsers()); // Listeyi güncelle
             closeModal(); // Modalı kapat
@@ -199,6 +203,19 @@ const UserList = () => {
                                 }}
                                 className="bg-gray-100"
 
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            name="confirmPassword"
+                            label="Confirm Password"
+                            rules={[{ required: true, message: "Please confirm your password" }]}
+                        >
+                            <Input.Password
+                                style={{
+                                    borderRadius: '12px',
+                                    padding: '12px',
+                                }}
+                                className="bg-gray-100"
                             />
                         </Form.Item>
                     </Form>

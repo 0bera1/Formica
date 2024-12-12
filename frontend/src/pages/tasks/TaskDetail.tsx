@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import SideBar from '../../components/SideBar';
 import TopBar from '../../components/TopBar';
+import { LeftOutlined } from '@ant-design/icons';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -99,6 +100,14 @@ const TaskDetail: React.FC = () => {
         <div className="max-w-4xl w-full lg:mt-0 md:mt-0 mt-14 flex flex-col md:flex-row lg:flex-row bg-white shadow-xl rounded-xl overflow-hidden">
           {/* Sol Alan: Task Detail Form */}
           <div className="w-full lg:w-2/3 md:w-2/3 p-8 space-y-6">
+            <div className="flex items-center mb-6">
+              <Button icon={<LeftOutlined />}
+                onClick={() => {
+                  window.history.back();
+                }}
+                className='hover:scale-110' />
+              <span className="ml-2 text-gray-700/30">Go Back</span>
+            </div>
             <h2 className="text-3xl font-semibold text-gray-900 mb-6">Task Detail</h2>
 
             <div className="mb-4">

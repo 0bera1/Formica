@@ -3,11 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../../redux/store';
 import { fetchUserDetail, updateUser } from '../../redux/slices/userSlice';
 import { useParams } from 'react-router-dom';
-import { Modal, Input, message } from 'antd';
+import { Modal, Input, message, Button } from 'antd';
 import SideBar from '../../components/SideBar';
 import { VscLoading } from 'react-icons/vsc';
-import { BiEdit} from 'react-icons/bi';
-import { AiFillLeftSquare } from 'react-icons/ai';
+import { BiEdit } from 'react-icons/bi';
+import { LeftOutlined } from '@ant-design/icons';
 import TopBar from '../../components/TopBar';
 
 const UserDetail: React.FC = () => {
@@ -74,13 +74,14 @@ const UserDetail: React.FC = () => {
       <TopBar />
       <div className="bg-white lg:mx-auto items-center rounded-lg shadow-lg p-8 w-full lg:max-w-4xl md:max-w-xl mx-auto my-auto">
         <div className="flex flex-col justify-center mb-5 space-y-4">
-          <button 
-            onClick={() => window.history.back()}
-            className="flex items-center space-x-2 justify-start"
-          >
-            <AiFillLeftSquare className="inline-block text-3xl text-blue-600 hover:text-blue-400 mr-1 transition-all duration-300 hover:scale-125" /> 
-            <h2 className="text-lg">Go Back</h2>
-          </button>
+          <div className="flex items-center mb-6">
+            <Button icon={<LeftOutlined />}
+              onClick={() => {
+                window.history.back();
+              }} 
+              className='hover:scale-110'/>
+              <span className="ml-2 text-gray-700/30">Go Back</span>
+              </div>
           <h2 className="text-4xl font-semibold ml-2 text-gray-900">User Details</h2>
         </div>
         <div className="space-y-6 text-xl ml-2 text-gray-800">
