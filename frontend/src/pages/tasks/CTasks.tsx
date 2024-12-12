@@ -112,8 +112,8 @@ const CTasks: React.FC = () => {
 
         {error && <p className="text-red-600 bg-red-100 p-4 rounded-lg mb-6 text-lg">{error}</p>}
 
-        <div className="md:bg-gradient-to-br from-gray-900/5 via-gray-800/5 to-gray-900/5 
-          backdrop-blur-lg backdrop-filter rounded-xl shadow-lg md:p-6 bg-transparent md:w-full mx-auto">
+        <div className="
+           rounded-xl  md:p-6 bg-transparent md:w-full mx-auto">
           <Table
             columns={columns}
             dataSource={completedTasks}
