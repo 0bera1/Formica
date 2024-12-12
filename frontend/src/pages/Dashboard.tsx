@@ -171,7 +171,7 @@ const Dashboard: React.FC = () => {
             onClick={() => setIsRightSidebarOpen(!isRightSidebarOpen)}>
             {isRightSidebarOpen ? <AiOutlineClose size={30} className='' /> : <MdAssignmentInd size={30} />}
           </button>
-          <div className='z-30 lg:block hidden'>
+          <div className='z-30 lg:block md:block hidden'>
             <button className={`py-2 px-3 bg-gradient-to-br rounded-full shadow-lg from-blue-500 to-teal-400 transition-all duration-500
              text-white items-center justify-center flex flex-col hover:scale-110  hover:from-teal-400 hover:to-blue-500
              ${isRightSidebarDesktop ? '' : ' mr-5'}` }
@@ -217,7 +217,7 @@ const Dashboard: React.FC = () => {
       </div>
       <div className={`fixed top-0 right-0 lg:h-screen h-full w-64 p-4 bg-white shadow-lg rounded-lg transform 
         transition-transform duration-300
-        z-20  ${isRightSidebarDesktop ? 'lg:translate-x-0' : 'lg:translate-x-full'}
+        z-20  ${isRightSidebarDesktop ? 'lg:translate-x-0 md:translate-x-0' : 'lg:translate-x-full md:translate-x-full'}
       ${isRightSidebarOpen ? 'translate-x-0' : 'translate-x-full'}  
         `}>
         <div className="flex justify-between items-center mb-4">
