@@ -109,7 +109,7 @@ const Dashboard: React.FC = () => {
       title: (
         <div className="flex items-center">
           Task Title
-          <button onClick={() => handleSort('title')} className="ml-2">
+          <button onClick={() => handleSort('title')} className="ml-2 hover:text-blue-500">
             {sortConfig.key === 'title' && sortConfig.direction === 'asc' && <FaSortAlphaDown />}
             {sortConfig.key === 'title' && sortConfig.direction === 'desc' && <FaSortAlphaUp />}
             {sortConfig.key !== 'title' && <FaSortAlphaDown />}
@@ -124,7 +124,7 @@ const Dashboard: React.FC = () => {
       title: (
         <div className="flex items-center">
           Description
-          <button onClick={() => handleSort('description')} className="ml-2">
+          <button onClick={() => handleSort('description')} className="ml-2 hover:text-blue-500">
             {sortConfig.key === 'description' && sortConfig.direction === 'asc' && <FaSortAlphaDown />}
             {sortConfig.key === 'description' && sortConfig.direction === 'desc' && <FaSortAlphaUp />}
             {sortConfig.key !== 'description' && <FaSortAlphaDown />}
@@ -140,7 +140,7 @@ const Dashboard: React.FC = () => {
       title: (
         <div className="flex items-center">
           Assignees
-          <button onClick={() => handleSort('assignees')} className="ml-2">
+          <button onClick={() => handleSort('assignees')} className="ml-2 hover:text-blue-500">
             {sortConfig.key === 'assignees' && sortConfig.direction === 'asc' && <FaSortAlphaDown />}
             {sortConfig.key === 'assignees' && sortConfig.direction === 'desc' && <FaSortAlphaUp />}
             {sortConfig.key !== 'assignees' && <FaSortAlphaDown />}
@@ -165,7 +165,7 @@ const Dashboard: React.FC = () => {
       title: (
         <div className="flex items-center">
           Created At
-          <button onClick={() => handleSort('createdAt')} className="ml-2">
+          <button onClick={() => handleSort('createdAt')} className="ml-2 hover:text-blue-500">
             {sortConfig.key === 'createdAt' && sortConfig.direction === 'asc' && <FaSortAmountDown />}
             {sortConfig.key === 'createdAt' && sortConfig.direction === 'desc' && <FaSortAmountUp />}
             {sortConfig.key !== 'createdAt' && <FaSortAmountDown />}
@@ -180,7 +180,7 @@ const Dashboard: React.FC = () => {
       title: (
         <div className="flex items-center">
           Updated At
-          <button onClick={() => handleSort('updatedAt')} className="ml-2">
+          <button onClick={() => handleSort('updatedAt')} className="ml-2 hover:text-blue-500">
             {sortConfig.key === 'updatedAt' && sortConfig.direction === 'asc' && <FaSortAmountDown />}
             {sortConfig.key === 'updatedAt' && sortConfig.direction === 'desc' && <FaSortAmountUp />}
             {sortConfig.key !== 'updatedAt' && <FaSortAmountDown />}
