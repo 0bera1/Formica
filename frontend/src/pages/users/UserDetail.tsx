@@ -8,6 +8,7 @@ import SideBar from '../../components/SideBar';
 import { VscLoading } from 'react-icons/vsc';
 import { BiEdit} from 'react-icons/bi';
 import { AiFillLeftSquare } from 'react-icons/ai';
+import TopBar from '../../components/TopBar';
 
 const UserDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -70,17 +71,17 @@ const UserDetail: React.FC = () => {
   return (
     <div className="flex min-h-screen bg-gray-100">
       <SideBar />
-      <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-4xl mx-auto my-auto">
-        <div className='flex flex-col justify-center mb-5 space-y-4'>
+      <TopBar />
+      <div className="bg-white lg:mx-auto items-center rounded-lg shadow-lg p-8 w-full lg:max-w-4xl md:max-w-xl mx-auto my-auto">
+        <div className="flex flex-col justify-center mb-5 space-y-4">
           <button 
-          onClick={() => window.history.back()}
-          className='items-center space-x-2 justify-start flex-row flex'>
-            <AiFillLeftSquare className='inline-block text-3xl text-blue-600
-            hover:text-blue-400 mr-1 transition-all duration-300
-            hover:scale-125'/> 
+            onClick={() => window.history.back()}
+            className="flex items-center space-x-2 justify-start"
+          >
+            <AiFillLeftSquare className="inline-block text-3xl text-blue-600 hover:text-blue-400 mr-1 transition-all duration-300 hover:scale-125" /> 
             <h2 className="text-lg">Go Back</h2>
           </button>
-          <h2 className="text-4xl font-semibold ml-2 text-gray-900 ">User Details</h2>
+          <h2 className="text-4xl font-semibold ml-2 text-gray-900">User Details</h2>
         </div>
         <div className="space-y-6 text-xl ml-2 text-gray-800">
           <p><strong className="text-blue-600">Username:</strong> {user.username}</p>
@@ -91,13 +92,10 @@ const UserDetail: React.FC = () => {
         {/* Edit Button */}
         <div className="mt-8 flex justify-start">
           <button
-            className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700
-             text-white font-semibold py-3 px-6 rounded-full shadow-xl w-full
-             transition-all duration-300 transform hover:scale-105
-             items-center flex justify-center"
+            className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold py-3 px-6 rounded-full shadow-xl w-full transition-all duration-300 transform hover:scale-105 flex items-center justify-center"
             onClick={openModal}
           >
-            <BiEdit className="inline-block text-xl  mr-2" />
+            <BiEdit className="inline-block text-xl mr-2" />
             Edit
           </button>
         </div>

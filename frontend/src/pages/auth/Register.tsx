@@ -33,9 +33,8 @@ function Register() {
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-            <div className="flex w-4/5 max-w-6xl bg-gray-800/50 rounded-xl shadow-2xl overflow-hidden backdrop-blur-lg">
-                {/* Left: Login Form */}
-                <div className="w-1/2 p-10 bg-gradient-to-br from-gray-900 to-gray-800 flex flex-col justify-center">
+            <div className="flex lg:w-4/5 max-w-full lg:max-w-6xl bg-gray-800/50 rounded-xl shadow-2xl overflow-hidden backdrop-blur-lg lg:flex-row flex-col">                {/* Left: Login Form */}
+                <div className="lg:w-1/2 p-10 bg-gradient-to-br from-gray-900 to-gray-800 flex flex-col justify-center">
                     <h2 className="text-4xl font-bold text-gray-100 mb-6 text-center">Welcome</h2>
                     <p className="text-gray-400 text-sm text-center mb-8">
                         Register to manage your tasks and collaborate with your team efficiently.
@@ -109,13 +108,13 @@ function Register() {
                 </div>
 
                 {/* Right: Icon and Slogan */}
-                <div className="w-1/2 bg-gradient-to-br from-blue-700 to-blue-900 flex flex-col items-center justify-center text-white p-10">
+                <div className="lg:w-1/2 bg-gradient-to-br from-blue-700 to-blue-900 flex flex-col items-center justify-center text-white p-10">
                     <div className="bg-white p-6 rounded-full shadow-lg mb-6">
                         {/* Replace with your app logo */}
                         <FaTasks className="text-blue-800" size={64} />
                     </div>
-                    <h3 className="text-3xl font-bold mb-4">Task & User Management</h3>
-                    <p className="text-center text-lg px-6">
+                    <h3 className="lg:text-3xl text-2xl font-bold mb-4">Task & User Management</h3>
+                    <p className="text-center lg:text-lg px-6">
                         Simplify your workflow and achieve more with our intuitive platform.
                     </p>
                 </div>

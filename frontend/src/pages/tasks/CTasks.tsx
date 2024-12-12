@@ -102,7 +102,7 @@ const CTasks: React.FC = () => {
   ];
 
   return (
-    <div className="flex min-h-screen flex-col lg:mt-0 mt-20 lg:flex-row">
+    <div className="flex min-h-screen flex-col md:mt-0 mt-20 md:flex-row">
       <SideBar />
       <TopBar />
       <div className="flex-1 p-8 overflow-y-auto">
@@ -112,8 +112,8 @@ const CTasks: React.FC = () => {
 
         {error && <p className="text-red-600 bg-red-100 p-4 rounded-lg mb-6 text-lg">{error}</p>}
 
-        <div className="lg:bg-gradient-to-br from-gray-900/5 via-gray-800/5 to-gray-900/5 
-          backdrop-blur-lg backdrop-filter rounded-xl shadow-lg lg:p-6 bg-transparent lg:w-full mx-auto">
+        <div className="md:bg-gradient-to-br from-gray-900/5 via-gray-800/5 to-gray-900/5 
+          backdrop-blur-lg backdrop-filter rounded-xl shadow-lg md:p-6 bg-transparent md:w-full mx-auto">
           <Table
             columns={columns}
             dataSource={completedTasks}

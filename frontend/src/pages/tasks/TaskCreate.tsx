@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from 'react';
-import { Button, Input, Form, message, Select, Tag } from 'antd';
+import { Button, Input, Form, message, Select, Tag, Spin } from 'antd';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../redux/store';
 import { createTask } from '../../redux/slices/taskSlice';
@@ -58,20 +58,25 @@ const TaskCreate: React.FC = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex lg:min-h-screen flex-col lg:mt-0 md:mt-0  md:flex-row lg:flex-row">
+        <SideBar />
+        <TopBar />
+        <div className="bg-gray-50 w-full min-h-screen flex justify-center items-center sm:px-6 lg:px-8 md:px-8">
+          <Spin size="large" />
+        </div>
+      </div>
+    );
   }
 
   return (
-    <>
-      <div className='lg:fixed left-0 top-0'>
-        <SideBar />
-        <TopBar />
-      </div>
-      <div className="bg-gray-50 min-h-screen flex justify-center items-center px-4 sm:px-6 lg:px-8"
-        style={{ zIndex: -999 }}>
-        <div className="w-full max-w-5xl lg:mt-0 mt-14 flex flex-col lg:flex-row bg-white shadow-xl rounded-xl overflow-hidden">
+    <div className="flex lg:min-h-screen flex-col lg:mt-0 md:mt-0 md:flex-row lg:flex-row">
+      <SideBar />
+      <TopBar />
+      <div className="bg-gray-50 w-full min-h-screen flex justify-center items-center sm:px-6 lg:px-8 md:px-8">
+        <div className="w-full max-w-4xl lg:mt-0 md:mt-0 mt-14 flex flex-col md:flex-row lg:flex-row bg-white shadow-xl rounded-xl overflow-hidden">
           {/* Sol Alan: Form */}
-          <div className="w-full lg:w-2/3 p-8 space-y-6">
+          <div className="w-full lg:w-2/3 md:w-2/3 p-8 space-y-6">
             <h2 className="text-3xl font-semibold text-gray-900 mb-6">Create Task</h2>
 
             <Form form={form} onFinish={onFinish} layout="vertical">
@@ -104,9 +109,10 @@ const TaskCreate: React.FC = () => {
               </Button>
             </Link>
           </div>
+          <div className='lg:block md:block hidden bg-gray-200/40 rounded-full max-w-[0.5px] w-full my-10' />
 
           {/* Sağ Alan: Sidebar */}
-          <div className="lg:w-1/3 bg-gray-50 p-8 space-y-6 rounded-r-xl flex flex-col justify-between">
+          <div className="lg:w-1/3 p-8 space-y-6 rounded-r-xl flex flex-col justify-between">
             <h3 className="text-xl font-semibold text-gray-900">Assign Users</h3>
 
             <div className="mb-4">
@@ -137,7 +143,7 @@ const TaskCreate: React.FC = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

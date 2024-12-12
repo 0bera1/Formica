@@ -10,6 +10,7 @@ import { AiOutlineClose } from 'react-icons/ai';
 import SideBar from '../components/SideBar';
 import './dashboard.css';
 import TopBar from '../components/TopBar';
+import { CgMore } from 'react-icons/cg';
 
 const { Option } = Select;
 
@@ -49,7 +50,7 @@ const Dashboard: React.FC = () => {
     dispatch(deleteTask(taskId));
   };
 
-   const getUsernames = (assigneeIds: string[]) => {
+  const getUsernames = (assigneeIds: string[]) => {
     return assigneeIds.map(id => {
       const user = users.find(user => user._id === id);
       return user ? user.username : 'Unknown User';
@@ -159,22 +160,29 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col lg:mt-0 mt-20 lg:flex-row">
+    <div className="flex lg:min-h-screen flex-col lg:mt-0 md:mt-0 mt-20 md:flex-row lg:flex-row">
       <SideBar />
-      <TopBar/>
+      <TopBar />
       <div className="flex-1 lg:px-3 lg:pt-8 lg:p-0 p-8 overflow-y-auto">
         <div className="flex justify-between items-center mb-8">
-          <h3 className="text-3xl font-semibold ml-5 ">Task Overview</h3>
+          <h3 className="text-3xl font-semibold ml-5 ">Tasks Overview</h3>
           <button
-            className="lg:hidden p-2 absolute top-4 bg-white rounded-full right-3 z-50"
+            className="lg:hidden md:hidden p-2 absolute top-4 bg-white rounded-full right-3 z-50"
             onClick={() => setIsRightSidebarOpen(!isRightSidebarOpen)}>
             {isRightSidebarOpen ? <AiOutlineClose size={30} className='' /> : <MdAssignmentInd size={30} />}
           </button>
           <div className='z-30 lg:block hidden'>
-            <button
-            onClick={()=> setIsRightSidebarDesktop(!isRightSidebarDesktop)}
+            <button className={`py-2 px-3 bg-gradient-to-br rounded-full shadow-lg from-blue-500 to-teal-400 transition-all duration-500
+             text-white items-center justify-center flex flex-col hover:scale-110  hover:from-teal-400 hover:to-blue-500
+             ${isRightSidebarDesktop ? '' : ' mr-5'}` }
+              onClick={() => setIsRightSidebarDesktop(!isRightSidebarDesktop)}
             >
-            {isRightSidebarDesktop ? <AiOutlineClose size={30} /> : <MdAssignmentInd size={30} />}
+              {isRightSidebarDesktop ? <AiOutlineClose size={20} />
+                : <div className='justify-center items-center flex flex-col '>
+                  <CgMore size={20} />
+                  <h3 className='text-xs'>More</h3>
+                </div>
+              }
 
             </button>
           </div>
@@ -182,7 +190,7 @@ const Dashboard: React.FC = () => {
 
         {error && <p className="text-red-600 bg-red-100 p-4 rounded-lg mb-6 text-lg">{error}</p>}
 
-        <div className={`${isRightSidebarDesktop ? 'lg:-translate-x-0 lg:mr-72':'lg:translate-x-0'} transition-all duration-500 lg:mx-5
+        <div className={`${isRightSidebarDesktop ? 'lg:-translate-x-0 lg:mr-72' : 'lg:translate-x-0'} transition-all duration-500 lg:mx-5
           `}>
           <Table
             columns={columns}
@@ -209,7 +217,7 @@ const Dashboard: React.FC = () => {
       </div>
       <div className={`fixed top-0 right-0 lg:h-screen h-full w-64 p-4 bg-white shadow-lg rounded-lg transform 
         transition-transform duration-300
-        z-20  ${isRightSidebarDesktop ? 'lg:translate-x-0':'lg:translate-x-full'}
+        z-20  ${isRightSidebarDesktop ? 'lg:translate-x-0' : 'lg:translate-x-full'}
       ${isRightSidebarOpen ? 'translate-x-0' : 'translate-x-full'}  
         `}>
         <div className="flex justify-between items-center mb-4">
@@ -259,10 +267,10 @@ const Dashboard: React.FC = () => {
       </div>
 
 
-          {/* Floating Button */}
-      <button 
-      className={`fixed lg:bottom-20 bottom-12 right-8 lg:right-80 z-10 p-4 bg-gradient-to-br from-blue-500 to-teal-400 text-white rounded-full shadow-lg transition-all hover:scale-125 duration-300 transform
-        ${isRightSidebarDesktop ? 'lg:-translate-x-0 ':'lg:translate-x-60'}
+      {/* Floating Button */}
+      <button
+        className={`fixed lg:bottom-20 bottom-12 right-8 lg:right-80 z-10 p-4 bg-gradient-to-br hover:from-teal-400 hover:to-blue-500 from-blue-500 to-teal-400 text-white rounded-full shadow-lg transition-all hover:scale-125 duration-300 transform
+        ${isRightSidebarDesktop ? 'lg:-translate-x-0 ' : 'lg:translate-x-60'}
       `}>
         <Link to="/task/create" className="flex items-center justify-center">
           <MdOutlinePlaylistAdd size={30} />

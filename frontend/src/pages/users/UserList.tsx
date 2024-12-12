@@ -10,6 +10,7 @@ import SideBar from "../../components/SideBar";
 import { RiUser6Line } from "react-icons/ri";
 import { MdDelete } from "react-icons/md";
 import { register } from "../../redux/slices/authSlice";
+import TopBar from "../../components/TopBar";
 
 const UserList = () => {
     const dispatch = useDispatch();
@@ -109,20 +110,20 @@ const UserList = () => {
     return (
         <div className="flex min-h-screen bg-white">
             <SideBar />
+            <TopBar />
             {/* Main Content Area */}
-            <div className="flex-1 p-8 overflow-y-auto bg-white rounded-lg shadow-md">
+            <div className="flex-1 p-8 lg:mt-0 md:mt-0 mt-20 overflow-y-auto bg-white rounded-lg shadow-md">
                 <h3 className="text-3xl font-semibold text-slate-600 mb-8">User Management</h3>
                 <Button
                     type="primary"
                     onClick={openModal}
                     className="
-            z-10 p-4 bg-gradient-to-br from-blue-400 to-blue-700
-             text-white rounded-xl mb-5 shadow-lg transition-all 
-             hover:scale-110 duration-300 transform hover:translate-x-2">
+        z-10 px-8 py-4 bg-blue-600 text-white rounded-lg mb-5 shadow-md transition-all 
+        duration-300 transform hover:bg-blue-700 hover:shadow-lg hover:scale-105">
                     Create User
                 </Button>
                 <div className="bg-gradient-to-br from-gray-900/5 via-gray-800/5 to-gray-900/5 
-      backdrop-blur-lg backdrop-filter rounded-xl shadow-lg p-6">
+      backdrop-blur-lg backdrop-filter rounded-xl shadow-lg ">
                     <div className="overflow-x-hidden">
                         <Table
                             columns={columns}
@@ -143,7 +144,7 @@ const UserList = () => {
                                 boxShadow: '0 8px 10px rgba(0, 0, 0, 0.1)',
                             }}
                             className="bg-gray-100"
-                            rowClassName="text-gray-800 hover:scale-[1.035] transition-all duration-500 "
+                            rowClassName="text-gray-800 transition-all duration-500 "
 
                         />
                     </div>

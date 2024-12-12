@@ -36,6 +36,7 @@ const TaskDetail: React.FC = () => {
       setTitle(task.title);
       setDescription(task.description);
       setAssignees(task.assignees || []);
+      setStatus(task.status); // status durumunu güncelle
     }
   }, [task]);
 
@@ -76,16 +77,13 @@ const TaskDetail: React.FC = () => {
 
   if (loading || loadingUsers) {
     return (
-      <>
-        <div className="lg:fixed left-0 top-0">
-          <SideBar />
-          <TopBar />
-
-        </div>
-        <div className="min-h-screen flex justify-center items-center bg-gray-50">
+      <div className="flex lg:min-h-screen flex-col lg:mt-0 md:mt-0 mt-20 md:flex-row lg:flex-row">
+        <SideBar />
+        <TopBar />
+        <div className="bg-gray-50 w-full min-h-screen flex justify-center items-center sm:px-6 lg:px-8 md:px-8">
           <Spin size="large" />
         </div>
-      </>
+      </div>
     );
   }
 
@@ -94,15 +92,13 @@ const TaskDetail: React.FC = () => {
   }
 
   return (
-    <>
-      <div className="lg:fixed left-0 top-0">
-        <SideBar />
-      </div>
-
-      <div className="bg-gray-50 min-h-screen flex justify-center items-center px-4 sm:px-6 lg:px-8">
-        <div className="w-full max-w-5xl lg:mt-0 mt-14 flex flex-col lg:flex-row bg-white shadow-xl rounded-xl overflow-hidden">
+    <div className="flex lg:min-h-screen flex-col lg:mt-0 md:mt-0 mt-20 md:flex-row lg:flex-row">
+      <SideBar />
+      <TopBar />
+      <div className="bg-gray-50 w-full min-h-screen flex justify-center items-center sm:px-6 lg:px-8 md:px-8">
+        <div className="max-w-4xl w-full lg:mt-0 md:mt-0 mt-14 flex flex-col md:flex-row lg:flex-row bg-white shadow-xl rounded-xl overflow-hidden">
           {/* Sol Alan: Task Detail Form */}
-          <div className="w-full lg:w-2/3 p-8 space-y-6">
+          <div className="w-full lg:w-2/3 md:w-2/3 p-8 space-y-6">
             <h2 className="text-3xl font-semibold text-gray-900 mb-6">Task Detail</h2>
 
             <div className="mb-4">
@@ -155,9 +151,9 @@ const TaskDetail: React.FC = () => {
               </Link>
             </div>
           </div>
-
+          <div className='lg:block md:block hidden bg-gray-200/40 rounded-full max-w-[0.5px] w-full my-10' />
           {/* Sağ Alan: Sidebar (Assign Users) */}
-          <div className="lg:w-1/3 bg-gray-50 p-8 space-y-6 rounded-r-xl flex flex-col justify-between">
+          <div className="lg:w-1/3 p-8 space-y-6 rounded-r-xl flex flex-col justify-between">
             <h3 className="text-xl font-semibold text-gray-900 mb-4">Assign Users</h3>
 
             <div className="mb-4 flex flex-wrap gap-2">
@@ -188,7 +184,7 @@ const TaskDetail: React.FC = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
