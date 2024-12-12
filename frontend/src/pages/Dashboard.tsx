@@ -11,6 +11,7 @@ import SideBar from '../components/SideBar';
 import './dashboard.css';
 import TopBar from '../components/TopBar';
 import { CgMore } from 'react-icons/cg';
+import { FaSortAlphaDown, FaSortAlphaUp, FaSortAmountDown, FaSortAmountUp } from 'react-icons/fa';
 
 const { Option } = Select;
 
@@ -25,6 +26,7 @@ const Dashboard: React.FC = () => {
   const [assignees, setAssignees] = useState<string[]>([]);
   const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
   const [isRightSidebarDesktop, setIsRightSidebarDesktop] = useState(true)
+  const [sortConfig, setSortConfig] = useState<{ key: string, direction: string | null }>({ key: '', direction: null });
 
   useEffect(() => {
     dispatch(fetchTasks());
@@ -74,22 +76,77 @@ const Dashboard: React.FC = () => {
     dispatch(fetchTasks());
   };
 
+  const handleSort = (key: string) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    } else if (sortConfig.key === key && sortConfig.direction === 'desc') {
+      direction = 'asc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedTasks = React.useMemo(() => {
+    if (sortConfig.direction === null) {
+      return filteredTasks;
+    }
+    const sorted = [...filteredTasks].sort((a, b) => {
+      if (sortConfig.key === 'createdAt' || sortConfig.key === 'updatedAt') {
+        return sortConfig.direction === 'asc'
+          ? new Date(a[sortConfig.key]).getTime() - new Date(b[sortConfig.key]).getTime()
+          : new Date(b[sortConfig.key]).getTime() - new Date(a[sortConfig.key]).getTime();
+      } else {
+        return sortConfig.direction === 'asc'
+          ? (a[sortConfig.key as keyof typeof a] as string).localeCompare(b[sortConfig.key as keyof typeof b] as string)
+          : (b[sortConfig.key as keyof typeof b] as string).localeCompare(a[sortConfig.key as keyof typeof a] as string);
+      }
+    });
+    return sorted;
+  }, [filteredTasks, sortConfig]);
+
   const columns = [
     {
-      title: 'Task Title',
+      title: (
+        <div className="flex items-center">
+          Task Title
+          <button onClick={() => handleSort('title')} className="ml-2">
+            {sortConfig.key === 'title' && sortConfig.direction === 'asc' && <FaSortAlphaDown />}
+            {sortConfig.key === 'title' && sortConfig.direction === 'desc' && <FaSortAlphaUp />}
+            {sortConfig.key !== 'title' && <FaSortAlphaDown />}
+          </button>
+        </div>
+      ),
       dataIndex: 'title',
       key: 'title',
       render: (text: string) => <span className="font-medium tracking-wide px-6 hover:text-blue-800 ">{text}</span>,
     },
     {
-      title: 'Description',
+      title: (
+        <div className="flex items-center">
+          Description
+          <button onClick={() => handleSort('description')} className="ml-2">
+            {sortConfig.key === 'description' && sortConfig.direction === 'asc' && <FaSortAlphaDown />}
+            {sortConfig.key === 'description' && sortConfig.direction === 'desc' && <FaSortAlphaUp />}
+            {sortConfig.key !== 'description' && <FaSortAlphaDown />}
+          </button>
+        </div>
+      ),
       dataIndex: 'description',
       key: 'description',
       render: (text: string) => text.length > 20 ? <span className="hover:text-blue-800 font-normal text-base tracking-wider transition-all duration-300">{text.slice(0, 15)}....</span>
         : <span className="hover:text-blue-800 font-normal text-base tracking-wider transition-all duration-300">{text}</span>,
     },
     {
-      title: 'Assignees',
+      title: (
+        <div className="flex items-center">
+          Assignees
+          <button onClick={() => handleSort('assignees')} className="ml-2">
+            {sortConfig.key === 'assignees' && sortConfig.direction === 'asc' && <FaSortAlphaDown />}
+            {sortConfig.key === 'assignees' && sortConfig.direction === 'desc' && <FaSortAlphaUp />}
+            {sortConfig.key !== 'assignees' && <FaSortAlphaDown />}
+          </button>
+        </div>
+      ),
       dataIndex: 'assignees',
       key: 'assignees',
       render: (assignees: string[]) => getUsernames(assignees),
@@ -105,13 +162,31 @@ const Dashboard: React.FC = () => {
       ),
     },
     {
-      title: 'Created At',
+      title: (
+        <div className="flex items-center">
+          Created At
+          <button onClick={() => handleSort('createdAt')} className="ml-2">
+            {sortConfig.key === 'createdAt' && sortConfig.direction === 'asc' && <FaSortAmountDown />}
+            {sortConfig.key === 'createdAt' && sortConfig.direction === 'desc' && <FaSortAmountUp />}
+            {sortConfig.key !== 'createdAt' && <FaSortAmountDown />}
+          </button>
+        </div>
+      ),
       dataIndex: 'createdAt',
       key: 'createdAt',
       render: (createdAt: string) => new Date(createdAt).toLocaleString(),
     },
     {
-      title: 'Updated At',
+      title: (
+        <div className="flex items-center">
+          Updated At
+          <button onClick={() => handleSort('updatedAt')} className="ml-2">
+            {sortConfig.key === 'updatedAt' && sortConfig.direction === 'asc' && <FaSortAmountDown />}
+            {sortConfig.key === 'updatedAt' && sortConfig.direction === 'desc' && <FaSortAmountUp />}
+            {sortConfig.key !== 'updatedAt' && <FaSortAmountDown />}
+          </button>
+        </div>
+      ),
       dataIndex: 'updatedAt',
       key: 'updatedAt',
       render: (updateTask: string) => new Date(updateTask).toLocaleString(),
@@ -194,7 +269,7 @@ const Dashboard: React.FC = () => {
           `}>
           <Table
             columns={columns}
-            dataSource={filteredTasks}
+            dataSource={sortedTasks}
             rowKey="_id"
             loading={loading}
             pagination={{ pageSize: 7 }}
