@@ -95,6 +95,12 @@ const Dashboard: React.FC = () => {
         return sortConfig.direction === 'asc'
           ? new Date(a[sortConfig.key]).getTime() - new Date(b[sortConfig.key]).getTime()
           : new Date(b[sortConfig.key]).getTime() - new Date(a[sortConfig.key]).getTime();
+      } else if (sortConfig.key === 'assignees') {
+        const aAssignees = getUsernames(a.assignees);
+        const bAssignees = getUsernames(b.assignees);
+        return sortConfig.direction === 'asc'
+          ? aAssignees.localeCompare(bAssignees)
+          : bAssignees.localeCompare(aAssignees);
       } else {
         return sortConfig.direction === 'asc'
           ? (a[sortConfig.key as keyof typeof a] as string).localeCompare(b[sortConfig.key as keyof typeof b] as string)
@@ -137,16 +143,7 @@ const Dashboard: React.FC = () => {
         : <span className="hover:text-blue-800 font-normal text-base tracking-wider transition-all duration-300">{text}</span>,
     },
     {
-      title: (
-        <div className="flex items-center">
-          Assignees
-          <button onClick={() => handleSort('assignees')} className="ml-2 hover:text-blue-500">
-            {sortConfig.key === 'assignees' && sortConfig.direction === 'asc' && <FaSortAlphaDown />}
-            {sortConfig.key === 'assignees' && sortConfig.direction === 'desc' && <FaSortAlphaUp />}
-            {sortConfig.key !== 'assignees' && <FaSortAlphaDown />}
-          </button>
-        </div>
-      ),
+      title: 'Assignees',
       dataIndex: 'assignees',
       key: 'assignees',
       render: (assignees: string[]) => getUsernames(assignees),
