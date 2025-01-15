@@ -5,7 +5,7 @@ interface TextInputProps {
     type: string;
     id: string;
     icon?: React.ReactNode;
-}
+};
 
 function TextInput({ label, placeholder, type, id, icon }: TextInputProps) {
     return (
