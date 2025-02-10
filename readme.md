@@ -9,4 +9,4 @@ jwt secret || mongo uri -> .env
 /frontend: Frontend ile ilgili tüm dosyalar burada. Vite, React, vb. konfigürasyonlar burada yer alır.
 /backend: Backend projesi burada (örneğin NestJS veya Express).
 /shared: Frontend ve backend arasında ortak kullanılacak utils, types, hooks, api gibi bileşenler. Bu klasör, her iki taraf arasında paylaşılan kodu içerir.
-/common: Projeye özel konfigürasyonlar, genel bağımlılıklar, global stil dosyaları vb. içerir.
+/common: Projeye özel konfigürasyonlar, genel bağımlılıklar, global stil dosyaları vb. içerir...
